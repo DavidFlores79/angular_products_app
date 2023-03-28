@@ -1,13 +1,20 @@
 <div class="vw-100 vh-100 d-flex align-items-center justify-content-center border">
     <div class="login-container col-10 col-sm-8 col-md-6 col-lg-4 p-3">
         <form #registerForm="ngForm" (ngSubmit)="onSubmit(registerForm)" class="was-validated">
+            <div class="card-text alert alert-danger" *ngIf="errorMessages.length > 0" id="error" role="alert">
+                <div *ngFor="let error of errorMessages">
+                    <small>{{ error.msg }}</small>
+                </div>
+            </div>
+            <div class="card-text alert alert-success" *ngIf="successMsg != ''" id="error" role="alert">
+                <small>{{ successMsg }} <a [routerLink]="['/login']">Logueate Aquí</a> </small>
+            </div>
+
             <h4 class="text-center">Regístrate</h4>
             <div class="p-3">
-                <div class="card-text alert alert-danger" *ngIf="false" id="error" role="alert">
-                    Esto es un error general
-                </div>
                 <label for="name" class="col-md-4 col-form-label text-md-end">Nombre</label>
-                <input minlength="3" type="text" class="form-control" name="name" #name="ngModel" [(ngModel)]="user.name" autocomplete="name" autofocus required>
+                <input minlength="3" type="text" class="form-control" name="name" #name="ngModel"
+                    [(ngModel)]="user.name" autocomplete="name" autofocus required>
 
                 <span *ngIf="!name.valid && name.touched" class="invalid-feedback" role="alert">
                     <strong>El nombre no es válido.</strong>
@@ -18,7 +25,8 @@
                     Esto es un error
                 </div>
                 <label for="nickname" class="col-md-4 col-form-label text-md-end">Nickname</label>
-                <input maxlength="12" id="nickname" type="text" class="form-control" name="nickname" #nickname="ngModel" [(ngModel)]="user.nickname" required autocomplete="nickname" autofocus>
+                <input maxlength="12" id="nickname" type="text" class="form-control" name="nickname" #nickname="ngModel"
+                    [(ngModel)]="user.nickname" required autocomplete="nickname" autofocus>
 
                 <span *ngIf="!nickname.valid && nickname.touched" class="invalid-feedback" role="alert">
                     <strong>El nickname no es válido.</strong>
@@ -29,7 +37,8 @@
                     Esto es un error
                 </div>
                 <label for="email" class="col-md-4 col-form-label text-md-end">Email</label>
-                <input id="email" type="email" class="form-control" name="email" #email="ngModel" [(ngModel)]="user.email" required autocomplete="email" autofocus>
+                <input id="email" type="email" class="form-control" name="email" #email="ngModel"
+                    [(ngModel)]="user.email" required autocomplete="email" autofocus>
 
                 <span *ngIf="!email.valid && email.touched" class="invalid-feedback" role="alert">
                     <strong>El nickname no es válido.</strong>
@@ -37,7 +46,8 @@
             </div>
             <div class="p-3">
                 <label for="password" class="col-md-4 col-form-label text-md-end">Contraseña</label>
-                <input minlength="8" id="password" type="password" class="form-control" name="password" #password="ngModel" [(ngModel)]="user.password" required autocomplete="password" autofocus>
+                <input minlength="8" id="password" type="password" class="form-control" name="password"
+                    #password="ngModel" [(ngModel)]="user.password" required autocomplete="password" autofocus>
 
                 <span *ngIf="!email.valid && email.touched" class="invalid-feedback" role="alert">
                     <strong>El password debe ser de 8 caracteres.</strong>
