@@ -1,0 +1,37 @@
+<div class="vw-100 vh-100 d-flex align-items-center justify-content-center border">
+    <div class="login-container col-10 col-sm-8 col-md-6 col-lg-4 p-3">
+        <form method="POST" action="/">
+            <h3 class="text-center">Registro</h3>
+            <div class="p-3">
+                <div class="card-text alert alert-danger" *ngIf="false" id="error" role="alert">
+                    Esto es un error
+                </div>
+                <label for="nickname" class="col-md-4 col-form-label text-md-end">Nickname</label>
+                <input maxlength="12" id="nickname" type="text" class="form-control is-invalid" name="nickname" value="" required autocomplete="nickname" autofocus>
+
+                <span *ngIf="false" class="invalid-feedback" role="alert">
+                    <strong>Mensaje de error</strong>
+                </span>
+            </div>
+            <div class="p-3">
+                <label for="password" class="col-md-4 col-form-label text-md-end">Contraseña</label>
+                <input id="password" type="password" class="form-control @error('password') is-invalid @enderror" name="password" required autocomplete="current-password">
+
+                <span *ngIf="false" class="invalid-feedback" role="alert">
+                    <strong>Mensaje de error</strong>
+                </span>
+            </div>
+            <div class="p-3 d-grid gap-2">
+                <!-- <button type="submit" class="btn btn btn-primary">Iniciar Sesion</button> -->
+                <button type="submit" class="btn btn-primary btn-block">
+                    Login
+                </button>
+                <div class="text-center">
+                    <a class="btn btn-link" href="">
+                        Olvidaste tu contraseña?
+                    </a>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>

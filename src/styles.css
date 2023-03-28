@@ -1,1 +1,24 @@
 /* You can add global styles to this file, and also import other style files */
+body {
+  font-family: "Poppins", sans-serif;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Menu Modal  */
+.modal {
+  background: rgba(0, 0, 0, 0.5) !important;
+}
+.modal-backdrop {
+  display: none !important;
+}
+/* Menu Modal  */
+
+/* Main Content */
+.main .contenedor {
+  box-shadow: -12px 17px 21px -12px rgba(0, 0, 0, 0.42);
+  -webkit-box-shadow: -12px 17px 21px -12px rgba(0, 0, 0, 0.42);
+  -moz-box-shadow: -12px 17px 21px -12px rgba(0, 0, 0, 0.42);
+}
+/* Main Content */
