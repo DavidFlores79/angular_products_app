@@ -1,18 +1,21 @@
+//Por Default
 import { Component } from '@angular/core';
-import { UserService } from 'src/app/services/user.service';
 import { HttpErrorResponse } from '@angular/common/http';
-import { User } from '../../models/user.model';
 import Swal from 'sweetalert2';
 import { Router } from '@angular/router';
 import { faPencilAlt, faTrash, faPlusCircle } from '@fortawesome/free-solid-svg-icons';
+//Del CRUD
+import { UserService } from 'src/app/services/user.service';
+import { User } from '../../models/user.model';
 
+//JQuery
 declare var $: any;
 
 @Component({
   selector: 'app-users',
   templateUrl: './users.component.html',
   styleUrls: ['./users.component.css'],
-  providers: [UserService],
+  providers: [UserService], //Para user el Servicio
 })
 export class UsersComponent {
   public page_title: string;
