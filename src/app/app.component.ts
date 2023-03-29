@@ -1,6 +1,7 @@
 import { Component, DoCheck, OnInit, ViewChild } from '@angular/core';
 import { UserService } from './services/user.service';
 
+declare var $: any;
 
 @Component({
   selector: 'app-root',
@@ -10,9 +11,9 @@ import { UserService } from './services/user.service';
 })
 export class AppComponent implements OnInit, DoCheck {
   title = 'App de Productos';
-  showModalBox: boolean = false;
   public identity: any;
   public token: any;
+  
 
   @ViewChild('content') content: any;
   
@@ -22,21 +23,15 @@ export class AppComponent implements OnInit, DoCheck {
 
   public ngOnInit() {
     console.log('componente login lanzado');
+
+    $(window).on('resize', function() {
+        $("#menuModal").modal("hide");
+    });
   }
 
   ngDoCheck() {
     console.log('doCheck');
     this.loadUser();
-  }
-
-  public open() {
-    if (0) {
-      // Dont open the modal
-      this.showModalBox = false;
-    } else {
-      // Open the modal
-      this.showModalBox = true;
-    }
   }
 
   public loadUser() {

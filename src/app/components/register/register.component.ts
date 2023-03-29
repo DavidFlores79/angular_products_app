@@ -54,18 +54,7 @@ export class RegisterComponent implements OnInit{
         console.log(this.errorMessages);
       },
       complete: () => console.info('complete') 
-    });
-
-    // this._userService.register(this.user).subscribe(
-    //   response => {
-    //     console.log('response', response);
-    //     registerForm.reset();
-    //   },
-    //   error => {
-    //     console.log('error', <any> error);
-    //   }
-    // );
-    
+    });    
   }
 
 }

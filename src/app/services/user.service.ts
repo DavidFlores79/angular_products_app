@@ -20,12 +20,47 @@ export class UserService {
         return "Hola mundo desde el servicio!";
     }
 
+    getUsers(): Observable<any> {
+
+        let headers = new HttpHeaders().set('Content-Type', 'application/json');
+        return this._http.get(this.url+'/api/users', { headers: headers});
+
+    }
+
+    postUser( user: User ): Observable<any> {
+
+        let body = user;
+        let headers = new HttpHeaders().set('Content-Type', 'application/json');
+
+        return this._http.post(this.url+'/api/users', body, { headers: headers});
+        
+    }
+
     register( user: User ): Observable<any> {
 
         let body = user;
         let headers = new HttpHeaders().set('Content-Type', 'application/json');
 
         return this._http.post(this.url+'/api/users', body, { headers: headers});
+        
+    }
+
+    update( user: User ): Observable<any> {
+
+        let body = user;
+        let headers = new HttpHeaders().set('Content-Type', 'application/json');
+
+        return this._http.put(`${this.url}/api/users/${user._id}`, body, { headers: headers});
+        
+    }
+
+    delete( user: User ): Observable<any> {
+
+        let headers = new HttpHeaders().set('Content-Type', 'application/json',)
+        .set('Authorization', `Bearer ${localStorage.getItem('token')}`);
+        console.log('headers', headers);
+        
+        return this._http.delete(`${this.url}/api/users/${user._id}`, { headers: headers});
         
     }
 

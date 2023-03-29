@@ -9,6 +9,11 @@ import { LoginComponent } from './components/login/login.component';
 import { RegisterComponent } from './components/register/register.component';
 import { HomeComponent } from './components/home/home.component';
 import { ErrorComponent } from './components/error/error.component';
+import { ProfileComponent } from './components/profile/profile.component';
+import { UsersComponent } from './components/users/users.component';
+import { ProductsComponent } from './components/products/products.component';
+import { CategoriesComponent } from './components/categories/categories.component';
+import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 
 
 @NgModule({
@@ -17,15 +22,20 @@ import { ErrorComponent } from './components/error/error.component';
     LoginComponent,
     RegisterComponent,
     HomeComponent,
-    ErrorComponent
+    ErrorComponent,
+    ProfileComponent,
+    UsersComponent,
+    ProductsComponent,
+    CategoriesComponent
   ],
   imports: [
     BrowserModule,
     routing,
     FormsModule,
-    HttpClientModule
+    HttpClientModule,
+    FontAwesomeModule
   ],
+  bootstrap: [AppComponent],
   providers: [ appRoutingProviders ],
-  bootstrap: [AppComponent]
 })
 export class AppModule { }
