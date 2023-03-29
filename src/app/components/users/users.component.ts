@@ -4,7 +4,7 @@ import { HttpErrorResponse } from '@angular/common/http';
 import { User } from '../../models/user.model';
 import Swal from 'sweetalert2';
 import { Router } from '@angular/router';
-import { faEdit, faTrash } from '@fortawesome/free-solid-svg-icons';
+import { faPencilAlt, faTrash, faPlusCircle } from '@fortawesome/free-solid-svg-icons';
 
 declare var $: any;
 
@@ -16,16 +16,17 @@ declare var $: any;
 })
 export class UsersComponent {
   public page_title: string;
-  public user: User;
-  public users: User[];
+  public dato: User;
+  public datos: User[];
   public errorMessages: any;
   public successMsg: string;
-  faEdit = faEdit;
+  faPencilAlt = faPencilAlt;
   faTrash = faTrash;
+  faPlusCircle = faPlusCircle;
 
-  constructor(public _userService: UserService, private _router: Router) {
+  constructor(public _datoService: UserService, private _router: Router) {
     this.page_title = 'Usuarios';
-    this.user = new User(
+    this.dato = new User(
       0,
       '',
       '',
@@ -40,19 +41,19 @@ export class UsersComponent {
     );
     this.errorMessages = [];
     this.successMsg = '';
-    this.users = [];
+    this.datos = [];
   }
 
   ngOnInit(): void {
     console.log('componente Usuarios lanzado!');
-    this.getUsers();
+    this.getDatos();
   }
 
-  getUsers() {
-    this._userService.getUsers().subscribe({
+  getDatos() {
+    this._datoService.getUsers().subscribe({
       next: (response) => {
         console.log('response', response);
-        this.users = response.data;
+        this.datos = response.data;
       },
       error: (error: HttpErrorResponse) => {
         console.log('error', error);
@@ -61,8 +62,12 @@ export class UsersComponent {
     });
   }
 
-  postUser(createForm: any) {
-    this._userService.postUser(this.user).subscribe({
+  createDato() {
+
+  }
+
+  postDato(createForm: any) {
+    this._datoService.postUser(this.dato).subscribe({
       next: (response) => {
         console.log(response);
         this.successMsg = response.message;
@@ -98,17 +103,17 @@ export class UsersComponent {
     });
   }
 
-  editUser(user: User) {
+  editDato(user: User) {
     console.log('user', user);
-    this.user = user;
+    this.dato = user;
     $('#editModal').modal('show');
   }
 
-  updateUser(editForm: any) {
-    this._userService.update(this.user).subscribe({
+  updateDato(editForm: any) {
+    this._datoService.update(this.dato).subscribe({
       next: (response) => {
         console.log(response);
-        this.user = response.data;
+        this.dato = response.data;
         editForm.reset();
         $('#editModal').modal('hide');
 
@@ -145,18 +150,18 @@ export class UsersComponent {
   }
 
   confirmDelete(user: User) {
-    this.user = user;
+    this.dato = user;
     $('#deleteModal').modal('show');
   }
 
-  deleteUser() {
-    console.log('user', this.user);
+  deleteDato() {
+    console.log('user', this.dato);
 
-    this._userService.delete(this.user).subscribe({
+    this._datoService.delete(this.dato).subscribe({
       next: (response) => {
         console.log(response);
         this.successMsg = response.message;
-        this.users = this.users.filter(user => user._id != this.user._id);
+        this.datos = this.datos.filter(user => user._id != this.dato._id);
         $('#deleteModal').modal('hide');
         Swal.fire({
           title: this.page_title,

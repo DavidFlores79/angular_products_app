@@ -129,16 +129,17 @@
                   <div class=" dropdown-header">
                     <h6 class="text-overflow m-0">¡Bienvenido!</h6>
                   </div>
-                  <a href="#" class="dropdown-item">
-                    <!-- <i class="fas fa-id-card"></i> -->
+                  <div class="dropdown-item disabled">
                     <span class="">{{ identity.name }}</span>
-                  </a>
-                  <a href="#" class="dropdown-item">
-                    <!-- <i class="fas fa-id-card-alt"></i> -->
+                  </div>
+                  <div class="dropdown-item" *ngIf="identity.nickname">
                     <span class="font-weight-bold">{{ identity.nickname }}</span>
-                  </a>
+                  </div>
+                  <div class="dropdown-item disabled">
+                    <span class="">{{ identity.role }}</span>
+                  </div>
                   <div class="dropdown-divider"></div>
-                  <a href="#" class="dropdown-item" onclick="abrirPWD()">
+                  <a href="" class="dropdown-item" onclick="abrirPWD()">
                     <!-- <i class="fas fa-lock-open"></i> -->
                     <span>Cambiar Contraseña</span>
                   </a>
