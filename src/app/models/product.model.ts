@@ -1,3 +1,4 @@
+import { Category } from './category.model';
 export class Product {
 
     constructor(
@@ -7,7 +8,7 @@ export class Product {
         public available: boolean,
         public status: boolean,
         public user_id: Object,
-        public category: number,
+        public category: Category,
         public image: string,
         public createdAt: any,
         public updatedAt: any,
