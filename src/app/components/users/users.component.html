@@ -5,14 +5,15 @@
                 <h5 class="font-weight-bold centers-title">
                     {{ page_title }}
                 </h5>
-                <button type="button" class="btn btn-outline-success" (click)="createDato()"
-                    data-toggle="tooltip" data-placement="top" title="Crear registro"
-                    onmouseenter="$(this).tooltip('show')" onmouseleave="$(this).tooltip('hide')">
+                <button type="button" class="btn btn-outline-success" (click)="createDato()" data-toggle="tooltip"
+                    data-placement="top" title="Crear registro" onmouseenter="$(this).tooltip('show')"
+                    onmouseleave="$(this).tooltip('hide')">
                     Crear {{ page_title }} <fa-icon [icon]="faPlusCircle"></fa-icon>
                 </button>
             </div>
             <div class="card-body">
-                <input type="text" name="buscar" class="search-query form-control col-lg-3 col-md-4 col-sm-12 mb-3" placeholder="Buscar..." ng-model="searchQuery">
+                <input type="text" name="buscar" class="search-query form-control col-lg-3 col-md-4 col-sm-12 mb-3"
+                    placeholder="Buscar..." ng-model="searchQuery">
                 <div class="table-responsive">
                     <table class="table table-striped">
                         <thead>
@@ -44,6 +45,77 @@
                         </tbody>
                     </table>
                 </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal Crear -->
+<div class="modal fade" id="createModal" tabindex="-1" aria-labelledby="createModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="createModalLabel">Alta de {{ page_title }}</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form #createForm="ngForm" (ngSubmit)="postDato(createForm)" class="was-validated">
+                    <div class="card-text alert alert-danger" *ngIf="errorMessages.length > 0" id="error" role="alert">
+                        <div *ngFor="let error of errorMessages">
+                            <small>{{ error.msg }}</small>
+                        </div>
+                    </div>
+                    <div class="card-text alert alert-success" *ngIf="successMsg != ''" id="error" role="alert">
+                        <small>{{ successMsg }}</small>
+                    </div>
+                    <div class="row">
+                        <div class="col">
+                            <div class="form-group">
+                                <label for="name">Nombre</label>
+                                <input type="text" minlength="3" name="name" class="form-control" #name="ngModel"
+                                    [(ngModel)]="dato.name" autocomplete="name" autofocus required>
+                                <span *ngIf="!name.valid && name.touched" class="invalid-feedback" role="alert">
+                                    <strong>Obligatorio. Mínimo 3 caracteres.</strong>
+                                </span>
+                            </div>
+                            <div class="form-group">
+                                <label for="email">Email</label>
+                                <input type="email" name="email" class="form-control" #email="ngModel"
+                                    [(ngModel)]="dato.email" autocomplete="email" autofocus required>
+                                <span *ngIf="!email.valid && email.touched" class="invalid-feedback" role="alert">
+                                    <strong>Obligatorio. El email no es válido.</strong>
+                                </span>
+                            </div>
+                            <div class="form-group">
+                                <label for="role">Rol</label>
+                                <select name="role" class="form-control" #role="ngModel" [(ngModel)]="dato.role"
+                                    autocomplete="role" autofocus required>
+                                    <option *ngFor="let role of roles; let i = index" [value]="role.name">
+                                        {{role.name}}
+                                    </option>
+                                </select>
+                                <span *ngIf="!role.valid && role.touched" class="invalid-feedback" role="alert">
+                                    <strong>Obligatorio. El Rol no es válido.</strong>
+                                </span>
+                            </div>
+                            <div class="form-group">
+                                <label for="password">Contraseña</label>
+                                <input type="password" minlength="6" name='password' class="form-control"
+                                    placeholder="Contraseña" #password="ngModel" [(ngModel)]="dato.password" autofocus>
+                                <span *ngIf="!password.valid && password.touched" class="invalid-feedback" role="alert">
+                                    <strong>Mínimo 6 caracteres.</strong>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group text-right">
+                        <button type="submit" [disabled]="editForm.invalid" class="btn btn-primary btn-block">
+                            Guardar
+                        </button>
+                    </div>
+                </form>
             </div>
         </div>
     </div>
@@ -89,8 +161,14 @@
                             </div>
                             <div class="form-group">
                                 <label for="role">Rol</label>
-                                <input type="text" name="role" class="form-control" #role="ngModel"
-                                    [(ngModel)]="dato.role" autocomplete="role" autofocus required>
+                                <!-- <input type="text" name="role" class="form-control" #role="ngModel"
+                                    [(ngModel)]="dato.role" autocomplete="role" autofocus required> -->
+                                <select name="role" class="form-control" #role="ngModel" [(ngModel)]="dato.role"
+                                    autocomplete="role" autofocus required>
+                                    <option *ngFor="let role of roles; let i = index" [value]="role.name">
+                                        {{role.name}}
+                                    </option>
+                                </select>
                                 <span *ngIf="!role.valid && role.touched" class="invalid-feedback" role="alert">
                                     <strong>Obligatorio. El Rol no es válido.</strong>
                                 </span>

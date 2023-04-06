@@ -14,6 +14,7 @@ import { UsersComponent } from './components/users/users.component';
 import { ProductsComponent } from './components/products/products.component';
 import { CategoriesComponent } from './components/categories/categories.component';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
+import { ChatComponent } from './components/chat/chat.component';
 
 
 @NgModule({
@@ -26,7 +27,8 @@ import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
     ProfileComponent,
     UsersComponent,
     ProductsComponent,
-    CategoriesComponent
+    CategoriesComponent,
+    ChatComponent
   ],
   imports: [
     BrowserModule,

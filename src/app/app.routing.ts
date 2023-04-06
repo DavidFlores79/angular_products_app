@@ -10,6 +10,7 @@ import { RegisterComponent } from "./components/register/register.component";
 import { UsersComponent } from './components/users/users.component';
 import { ProductsComponent } from './components/products/products.component';
 import { CategoriesComponent } from "./components/categories/categories.component";
+import { ChatComponent } from "./components/chat/chat.component";
 
 //definir las rutas
 const appRoutes: Routes = [
@@ -22,6 +23,7 @@ const appRoutes: Routes = [
     { path: 'usuarios', component: UsersComponent, },
     { path: 'productos', component: ProductsComponent, },
     { path: 'categorias', component: CategoriesComponent, },
+    { path: 'chat', component: ChatComponent, },
     { path: '**', component: ErrorComponent, },
 ];
 

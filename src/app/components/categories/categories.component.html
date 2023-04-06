@@ -2,12 +2,151 @@
     <div class="main mx-auto col-lg-10">
         <div class="card contenedor">
             <div class="card-header bg-default d-md-flex justify-content-between ">
-                <h5 class="font-weight-bold centers-title">{{ page_title }}</h5>
-                <input type="text" name="buscar" class="search-query form-control col-lg-3 col-md-4 col-sm-12" placeholder="Buscar..." ng-model="searchQuery">
+                <h5 class="font-weight-bold centers-title">
+                    {{ page_title }}
+                </h5>
+                <button type="button" class="btn btn-outline-success" (click)="createDato()" data-toggle="tooltip"
+                    data-placement="top" title="Crear registro" onmouseenter="$(this).tooltip('show')"
+                    onmouseleave="$(this).tooltip('hide')">
+                    Crear {{ page_title }} <fa-icon [icon]="faPlusCircle"></fa-icon>
+                </button>
             </div>
             <div class="card-body">
-                <div class="row d-flex flex-column flex-sm-row align-items-stretch align-items-sm-center">
+                <input type="text" name="buscar" class="search-query form-control col-lg-3 col-md-4 col-sm-12 mb-3"
+                    placeholder="Buscar..." ng-model="searchQuery">
+                <div class="table-responsive">
+                    <table class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th scope="col">Nombre</th>
+                                <th class="text-center" scope="col">Opciones</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="let dato of datos">
+                                <td>{{ dato.name }}</td>
+                                <td class="d-flex justify-content-center">
+                                    <button type="button" class="btn btn-outline-primary mx-1" (click)="editDato(dato)"
+                                        data-toggle="tooltip" data-placement="top" title="Editar registro"
+                                        onmouseenter="$(this).tooltip('show')" onmouseleave="$(this).tooltip('hide')">
+                                        <fa-icon [icon]="faPencilAlt"></fa-icon>
+                                    </button>
+                                    <button type="button" class="btn btn-outline-danger" (click)="confirmDelete(dato)"
+                                        data-toggle="tooltip" data-placement="top" title="Eliminar registro"
+                                        onmouseenter="$(this).tooltip('show')" onmouseleave="$(this).tooltip('hide')">
+                                        <fa-icon [icon]="faTrash"></fa-icon>
+                                    </button>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
                 </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal Crear -->
+<div class="modal fade" id="createModal" tabindex="-1" aria-labelledby="createModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="createModalLabel">Alta de {{ page_title }}</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form #createForm="ngForm" (ngSubmit)="postDato(createForm)" class="was-validated">
+                    <div class="card-text alert alert-danger" *ngIf="errorMessages.length > 0" id="error" role="alert">
+                        <div *ngFor="let error of errorMessages">
+                            <small>{{ error.msg }}</small>
+                        </div>
+                    </div>
+                    <div class="card-text alert alert-success" *ngIf="successMsg != ''" id="error" role="alert">
+                        <small>{{ successMsg }}</small>
+                    </div>
+                    <div class="row">
+                        <div class="col">
+                            <div class="form-group">
+                                <label for="name">Nombre</label>
+                                <input type="text" minlength="3" name="name" class="form-control" #name="ngModel"
+                                    [(ngModel)]="dato.name" autocomplete="name" autofocus required>
+                                <span *ngIf="!name.valid && name.touched" class="invalid-feedback" role="alert">
+                                    <strong>Obligatorio. Mínimo 3 caracteres.</strong>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group text-right">
+                        <button type="submit" [disabled]="editForm.invalid" class="btn btn-primary btn-block">
+                            Guardar
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal Editar -->
+<div class="modal fade" id="editModal" tabindex="-1" aria-labelledby="editModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="editModalLabel">Editar {{ page_title }}</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form #editForm="ngForm" (ngSubmit)="updateDato(editForm)" class="was-validated">
+                    <div class="card-text alert alert-danger" *ngIf="errorMessages.length > 0" id="error" role="alert">
+                        <div *ngFor="let error of errorMessages">
+                            <small>{{ error.msg }}</small>
+                        </div>
+                    </div>
+                    <div class="card-text alert alert-success" *ngIf="successMsg != ''" id="error" role="alert">
+                        <small>{{ successMsg }}</small>
+                    </div>
+                    <div class="row">
+                        <div class="col">
+                            <div class="form-group">
+                                <label for="name">Nombre</label>
+                                <input type="text" minlength="3" name="name" class="form-control" #name="ngModel"
+                                    [(ngModel)]="dato.name" autocomplete="name" autofocus required>
+                                <span *ngIf="!name.valid && name.touched" class="invalid-feedback" role="alert">
+                                    <strong>Obligatorio. Mínimo 3 caracteres.</strong>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group text-right">
+                        <button type="submit" [disabled]="editForm.invalid" class="btn btn-primary btn-block">
+                            Actualizar
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal Eliminar -->
+<div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="deleteModalLabel">Eliminar {{ page_title }}</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body text-center">
+                ¿Realmente desea eliminar el registro <span class="font-weight-bold">{{ dato.name }}</span>?
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger" (click)="deleteDato()">Eliminar</button>
             </div>
         </div>
     </div>

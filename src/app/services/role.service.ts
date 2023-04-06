@@ -1,14 +1,14 @@
 import { Injectable } from "@angular/core";
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from "rxjs";
-import { User } from "../models/user.model";
+import { Role } from "../models/role.model";
 import { global } from './global';
 
 
 
 @Injectable()
 
-export class UserService {
+export class RoleService {
 
     url: string;
     public identity: any;
@@ -17,7 +17,7 @@ export class UserService {
     constructor( public _http: HttpClient ) { this.url = global.url }
 
     test() {
-        return "Hola mundo desde el servicio!";
+        return "Hola mundo desde el servicio Roles!";
     }
 
     getRoles(): Observable<any> {
@@ -27,56 +27,40 @@ export class UserService {
 
     }
 
-    getUsers(): Observable<any> {
+    postRole( role: Role ): Observable<any> {
 
-        let headers = new HttpHeaders().set('Content-Type', 'application/json');
-        return this._http.get(this.url+'/api/users', { headers: headers});
-
-    }
-
-    postUser( user: User ): Observable<any> {
-
-        let body = user;
+        let body = role;
         let headers = new HttpHeaders().set('Content-Type', 'application/json');
 
-        return this._http.post(this.url+'/api/users', body, { headers: headers});
+        return this._http.post(this.url+'/api/roles', body, { headers: headers});
         
     }
 
-    register( user: User ): Observable<any> {
+    register( role: Role ): Observable<any> {
 
-        let body = user;
+        let body = role;
         let headers = new HttpHeaders().set('Content-Type', 'application/json');
 
-        return this._http.post(this.url+'/api/users', body, { headers: headers});
+        return this._http.post(this.url+'/api/roles', body, { headers: headers});
         
     }
 
-    update( user: User ): Observable<any> {
+    update( role: Role ): Observable<any> {
 
-        let body = user;
+        let body = role;
         let headers = new HttpHeaders().set('Content-Type', 'application/json');
 
-        return this._http.put(`${this.url}/api/users/${user._id}`, body, { headers: headers});
+        return this._http.put(`${this.url}/api/roles/${role._id}`, body, { headers: headers});
         
     }
 
-    delete( user: User ): Observable<any> {
+    delete( role: Role ): Observable<any> {
 
         let headers = new HttpHeaders().set('Content-Type', 'application/json',)
         .set('Authorization', `Bearer ${localStorage.getItem('token')}`);
         console.log('headers', headers);
         
-        return this._http.delete(`${this.url}/api/users/${user._id}`, { headers: headers});
-        
-    }
-
-    login( user: User ): Observable<any> {
-
-        let body = user;
-        let headers = new HttpHeaders().set('Content-Type', 'application/json');
-
-        return this._http.post(this.url+'/auth/login', body, { headers: headers});
+        return this._http.delete(`${this.url}/api/roles/${role._id}`, { headers: headers});
         
     }
 
