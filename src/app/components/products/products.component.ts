@@ -22,6 +22,7 @@ export class ProductsComponent {
   public page_title: string;
   public dato: Product;
   public datos: Product[];
+  public categories: Category[];
   public errorMessages: any;
   public successMsg: string;
   faPencilAlt = faPencilAlt;
@@ -34,11 +35,13 @@ export class ProductsComponent {
     this.errorMessages = [];
     this.successMsg = '';
     this.datos = [];
+    this.categories = [];
   }
 
   ngOnInit(): void {
     console.log('componente Usuarios lanzado!');
     this.getDatos();
+    this.getCategories();
   }
 
   getDatos() {
@@ -54,8 +57,22 @@ export class ProductsComponent {
     });
   }
 
-  createDato() {
+  getCategories() {
+    this._datoService.getCategories().subscribe({
+      next: (response) => {
+        console.log('response', response);
+        this.categories = response.data;
+      },
+      error: (error: HttpErrorResponse) => {
+        console.log('error', error);
+      },
+      
+    });
+  }
 
+  createDato() {
+    this.dato = new Product(0, '', 0, true, true, 0, new Category(0, '', false, '', undefined, undefined), '', undefined, undefined);
+    $('#createModal').modal('show');
   }
 
   postDato(createForm: any) {

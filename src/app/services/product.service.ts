@@ -19,6 +19,13 @@ export class ProductService {
         return "Hola mundo desde el servicio PRODUCT!";
     }
 
+    getCategories(): Observable<any> {
+
+        let headers = new HttpHeaders().set('Content-Type', 'application/json');
+        return this._http.get(this.url+'/api/categories', { headers: headers});
+
+    }
+
     getProducts(): Observable<any> {
 
         let headers = new HttpHeaders().set('Content-Type', 'application/json');
@@ -29,7 +36,8 @@ export class ProductService {
     postProduct( product: Product ): Observable<any> {
 
         let body = product;
-        let headers = new HttpHeaders().set('Content-Type', 'application/json');
+        let headers = new HttpHeaders().set('Content-Type', 'application/json')
+        .set('Authorization', `Bearer ${localStorage.getItem('token')}`);
 
         return this._http.post(this.url+'/api/products', body, { headers: headers});
         

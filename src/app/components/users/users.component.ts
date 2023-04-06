@@ -22,7 +22,7 @@ export class UsersComponent {
   public page_title: string;
   public dato: User;
   public datos: User[];
-  public role: Role;
+  // public role: Role;
   public roles: Role[];
   public errorMessages: any;
   public successMsg: string;
@@ -45,7 +45,7 @@ export class UsersComponent {
       '',
       ''
     );
-    this.role = new Role(0, '', true, false, '', '');
+    // this.role = new Role(0, '', true, false, '', '');
     this.errorMessages = [];
     this.successMsg = '';
     this.datos = [];
