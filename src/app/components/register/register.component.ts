@@ -1,6 +1,7 @@
 import { HttpErrorResponse } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { User } from 'src/app/models/user.model';
+import { AuthService } from 'src/app/services/auth.service';
 import { UserService } from 'src/app/services/user.service';
 
 /** Se tiene que cargar el servicio dentro 
@@ -12,7 +13,7 @@ import { UserService } from 'src/app/services/user.service';
   selector: 'app-register',
   templateUrl: './register.component.html',
   styleUrls: ['./register.component.css'],
-  providers: [ UserService ] 
+  providers: [ UserService, AuthService ] 
 })
 export class RegisterComponent implements OnInit{
 
@@ -22,7 +23,7 @@ export class RegisterComponent implements OnInit{
   public successMsg: String;
   
 
-  constructor( private _userService: UserService ) {
+  constructor( private _authService: AuthService ) {
     this.page_title = 'Identifícate';
     this.user = new User(1, '', '', '','','','USER_ROLE', true, true, '', '');
     this.errorMessages = [];
@@ -35,7 +36,7 @@ export class RegisterComponent implements OnInit{
 
   onSubmit(registerForm: any) {
 
-    this._userService.register(this.user).subscribe({
+    this._authService.register(this.user).subscribe({
       next: (response) =>{
          console.log(response);
          this.successMsg = response.message;

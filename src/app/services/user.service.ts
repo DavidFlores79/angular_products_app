@@ -43,15 +43,6 @@ export class UserService {
         
     }
 
-    register( user: User ): Observable<any> {
-
-        let body = user;
-        let headers = new HttpHeaders().set('Content-Type', 'application/json');
-
-        return this._http.post(this.url+'/api/users', body, { headers: headers});
-        
-    }
-
     update( user: User ): Observable<any> {
 
         let body = user;
@@ -68,15 +59,6 @@ export class UserService {
         console.log('headers', headers);
         
         return this._http.delete(`${this.url}/api/users/${user._id}`, { headers: headers});
-        
-    }
-
-    login( user: User ): Observable<any> {
-
-        let body = user;
-        let headers = new HttpHeaders().set('Content-Type', 'application/json');
-
-        return this._http.post(this.url+'/auth/login', body, { headers: headers});
         
     }
 

@@ -3,13 +3,14 @@ import { User } from 'src/app/models/user.model';
 import { UserService } from 'src/app/services/user.service';
 import { HttpErrorResponse } from '@angular/common/http';
 import { Router, ActivatedRoute, Params } from '@angular/router';
+import { AuthService } from 'src/app/services/auth.service';
 
 
 @Component({
   selector: 'app-login',
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.css'],
-  providers: [ UserService ] 
+  providers: [ UserService, AuthService ] 
 })
 export class LoginComponent implements OnInit{
 
@@ -20,7 +21,7 @@ export class LoginComponent implements OnInit{
   public token: any;
   public identity: any;
 
-  constructor( private _userService: UserService, private _router: Router, private _route: ActivatedRoute ) {
+  constructor( private _authService: AuthService, private _router: Router, private _route: ActivatedRoute ) {
     this.page_title = 'Identifícate';
     this.user = new User(0, '', '', '','','','USER_ROLE', true, false, '', '');
     this.errorMessages = [];
@@ -36,7 +37,7 @@ export class LoginComponent implements OnInit{
 
   onSubmit(loginForm: any) {
     
-    this._userService.login(this.user).subscribe({
+    this._authService.login(this.user).subscribe({
       next: (response) =>{
          
          this.token = response.jwt;

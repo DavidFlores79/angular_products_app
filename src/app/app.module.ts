@@ -18,6 +18,7 @@ import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { ChatComponent } from './components/chat/chat.component';
 import { AuthGuard } from './guards/auth.guard';
 import { UserService } from './services/user.service';
+import { ForbiddenComponent } from './components/forbidden/forbidden.component';
 
 @NgModule({
   declarations: [
@@ -30,7 +31,8 @@ import { UserService } from './services/user.service';
     UsersComponent,
     ProductsComponent,
     CategoriesComponent,
-    ChatComponent
+    ChatComponent,
+    ForbiddenComponent
   ],
   imports: [
     BrowserModule,
