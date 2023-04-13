@@ -10,9 +10,19 @@ body {
 .modal {
   background: rgba(0, 0, 0, 0.5) !important;
 }
+
+.modal label, .modal input, .modal select, button[type=submit], .btn.btn-danger, .modal .modal-body {
+  font-size: 0.8rem;
+}
+
+.modal h5 {
+  font-size: 0.9rem;
+}
+
 .modal-backdrop {
   display: none !important;
 }
+
 /* Menu Modal  */
 
 /* Main Content */
@@ -21,4 +31,81 @@ body {
   -webkit-box-shadow: -12px 17px 21px -12px rgba(0, 0, 0, 0.42);
   -moz-box-shadow: -12px 17px 21px -12px rgba(0, 0, 0, 0.42);
 }
+
+.user-name {
+  font-size: 0.9rem !important;
+}
 /* Main Content */
+
+
+/* Imagen File Uploader */
+.image-container {
+  position: relative;
+}
+
+.fileuploader {
+  position: absolute;
+  bottom: 5px;
+  right: 2px;
+}
+
+.btn.up_btn.afu-attach-pin {
+  background-color: #0275d8;
+  color: #FFFFFF;
+  border-color: #FFFFFF;
+}
+
+.label.label-info {
+  display: none;
+}
+
+.image-container .rounded-circle, .image-container .rounded {
+  width: 150px;
+  height: 150px;
+  padding: 3px;
+}
+
+.image-container .rounded {
+  width: 175px;
+  padding: 3px 7px;
+}
+
+/* Imagen File Uploader */
+
+
+/* estilos en las tablas */
+.table-responsive,
+.form-check-label,
+.card .btn,
+.card input {
+    font-size: 0.8rem;
+}
+.table-responsive td {
+    padding: 7px !important;
+}
+.table-responsive .btn {
+    padding: 2px 6px;
+}
+.table-responsive .fas.fa-edit,
+.table-responsive .fas.fa-trash-alt {
+    font-size: 0.7rem;
+}
+.card .card-header.bg-primary {
+    padding: 10px 20px;
+}
+
+.table-responsive h4 {
+    font-size: 1rem;
+}
+.card label {
+    font-size: 0.8rem;
+}
+
+.td-options .btn-warning {
+    color: white;
+}
+
+.text-body {
+    color: #ffffff;
+}
+/* ./ fin estilos en las tablas */

@@ -3,11 +3,56 @@
         <div class="card contenedor">
             <div class="card-header bg-default d-md-flex justify-content-between ">
                 <h5 class="font-weight-bold centers-title">{{ page_title }}</h5>
-                <input type="text" name="buscar" class="search-query form-control col-lg-3 col-md-4 col-sm-12" placeholder="Buscar..." ng-model="searchQuery">
+                <input type="text" name="buscar" class="search-query form-control col-lg-3 col-md-4 col-sm-12"
+                    placeholder="Buscar..." ng-model="searchQuery">
             </div>
             <div class="card-body">
-                <div class="row d-flex flex-column flex-sm-row align-items-stretch align-items-sm-center">
-                </div>
+                <form #nomForm="ngForm" (ngSubmit)="onSubmit(nomForm)" class="was-validated">
+                    <div class="card-text alert alert-danger" *ngIf="errorMessages.length > 0" id="error" role="alert">
+                        <div *ngFor="let error of errorMessages">
+                            <small>{{ error.msg }}</small>
+                        </div>
+                    </div>
+                    <div class="card-text alert alert-success" *ngIf="successMsg != ''" id="error" role="alert">
+                        <small>{{ successMsg }} </small>
+                    </div>
+
+                    <h4 class="text-center">Descargar NOM 050-051</h4>
+                    <div class="p-3">
+                        <div class="card-text alert alert-danger" *ngIf="false" id="error" role="alert">
+                            Esto es un error
+                        </div>
+                        <label for="articulo" class="col-form-label text-md-end">Artículo</label>
+                        <input id="articulo" type="articulo" class="form-control" name="articulo" #articulo="ngModel"
+                            [(ngModel)]="data.articulo" required autocomplete="articulo" autofocus>
+
+                        <span *ngIf="!articulo.valid && articulo.touched" class="invalid-feedback" role="alert">
+                            <strong>El producto no es válido.</strong>
+                        </span>
+                    </div>
+                    <div class="p-3">
+                        <div class="card-text alert alert-danger" *ngIf="false" id="error" role="alert">
+                            Esto es un error
+                        </div>
+                        <label for="nom" class="col-form-label text-md-end">Norma</label>
+                        <select name="nom" class="form-control" #nom="ngModel" [(ngModel)]="data.nom"
+                            autocomplete="nom" autofocus required>
+                            <option value="" disabled selected>Selecciona una Norma...</option>
+                            <option *ngFor="let nom of noms; let i = index" [value]="nom.id">
+                                {{nom.name}}
+                            </option>
+                        </select>
+                        <span *ngIf="!nom.valid && nom.touched" class="invalid-feedback" role="alert">
+                            <strong>Obligatorio. La Norma escogida no es válida.</strong>
+                        </span>
+                    </div>
+                    <div class="p-3 d-grid gap-2">
+                        <button type="submit" [disabled]="nomForm.invalid" class="btn btn-primary btn-block">
+                            Descargar
+                        </button>
+                    </div>
+                </form>
+
             </div>
         </div>
     </div>

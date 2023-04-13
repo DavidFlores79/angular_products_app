@@ -26,10 +26,10 @@
                         </thead>
                         <tbody>
                             <tr *ngFor="let dato of datos">
-                                <td><img [src]="dato.image" [alt]="dato.name" height="50"></td>
+                                <td><img class="border" width="30" height="30" src="{{ dato.image }}" alt=""  *ngIf="dato && dato.image"></td>
                                 <td>{{ dato.name }}</td>
                                 <td>{{ dato.category.name }}</td>
-                                <td>{{ dato.price }}</td>
+                                <td>{{ dato.price | currency }}</td>
                                 <td class="d-flex justify-content-center">
                                     <button type="button" class="btn btn-outline-primary mx-1" (click)="editDato(dato)"
                                         data-toggle="tooltip" data-placement="top" title="Editar registro"
@@ -73,6 +73,14 @@
                     </div>
                     <div class="row">
                         <div class="col">
+                            <div class="d-flex justify-content-center align-items-center">
+                                <div class="image-container">
+                                    <img class="rounded border" src="{{ dato.image }}" alt=""  *ngIf="dato && dato.image">
+                                    <img class="rounded border" src="https://res.cloudinary.com/dltvxi4tm/image/upload/v1680155130/products/up8ji7twwgvk41k5vgrm.png" alt=""  *ngIf="dato.image == ''">
+                                    <angular-file-uploader class="fileuploader" [config]="afuConfig" [resetUpload]=resetVar (ApiResponse)="productUpload($event)">
+                                    </angular-file-uploader>
+                                </div>
+                            </div>
                             <div class="form-group">
                                 <label for="name">Nombre</label>
                                 <input type="text" minlength="3" name="name" class="form-control" #name="ngModel"
@@ -83,15 +91,15 @@
                             </div>
                             <div class="form-group">
                                 <label for="price">Precio</label>
-                                <input type="text" minlength="3" name="price" class="form-control" #price="ngModel"
-                                    [(ngModel)]="dato.price" autocomplete="price" autofocus required>
+                                <input type="number" min="0" step="0.01" name="price" class="form-control" #price="ngModel"
+                                    [(ngModel)]="dato.price" autocomplete="price" autofocus>
                                 <span *ngIf="!price.valid && price.touched" class="invalid-feedback" role="alert">
-                                    <strong>Obligatorio. Mínimo 3 caracteres.</strong>
+                                    <strong>Error.</strong>
                                 </span>
                             </div>
                             <div class="form-group">
                                 <label for="category">Rol</label>
-                                <select name="category" class="form-control" #category="ngModel" [(ngModel)]="dato.category"
+                                <select name="category" class="form-control" #category="ngModel" [(ngModel)]="dato.category._id"
                                     autocomplete="category" autofocus required>
                                     <option *ngFor="let category of categories; let i = index" [value]="category._id">
                                         {{category.name}}
@@ -136,6 +144,14 @@
                     </div>
                     <div class="row">
                         <div class="col">
+                            <div class="d-flex justify-content-center align-items-center">
+                                <div class="image-container">
+                                    <img class="rounded border" src="{{ dato.image }}" alt=""  *ngIf="dato && dato.image">
+                                    <img class="rounded border" src="https://res.cloudinary.com/dltvxi4tm/image/upload/v1680155130/products/up8ji7twwgvk41k5vgrm.png" alt=""  *ngIf="dato.image == ''">
+                                    <angular-file-uploader class="fileuploader" [config]="afuConfig" [resetUpload]=resetVar (ApiResponse)="productUpload($event)">
+                                    </angular-file-uploader>
+                                </div>
+                            </div>
                             <div class="form-group">
                                 <label for="name">Nombre</label>
                                 <input type="text" minlength="3" name="name" class="form-control" #name="ngModel"
@@ -146,15 +162,15 @@
                             </div>
                             <div class="form-group">
                                 <label for="price">Precio</label>
-                                <input type="text" minlength="3" name="price" class="form-control" #price="ngModel"
-                                    [(ngModel)]="dato.price" autocomplete="price" autofocus required>
+                                <input type="number" min="0" step="0.1" name="price" class="form-control" #price="ngModel"
+                                    [(ngModel)]="dato.price" autocomplete="price" autofocus>
                                 <span *ngIf="!price.valid && price.touched" class="invalid-feedback" role="alert">
-                                    <strong>Obligatorio. Mínimo 3 caracteres.</strong>
+                                    <strong>Error</strong>
                                 </span>
                             </div>
                             <div class="form-group">
                                 <label for="category">Rol</label>
-                                <select name="category" class="form-control" #category="ngModel" [(ngModel)]="dato.category"
+                                <select name="category" class="form-control" #category="ngModel" [(ngModel)]="dato.category._id"
                                     autocomplete="category" autofocus required>
                                     <option *ngFor="let category of categories; let i = index" [value]="category._id">
                                         {{category.name}}

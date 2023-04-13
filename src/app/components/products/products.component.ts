@@ -8,6 +8,7 @@ import { faPencilAlt, faTrash, faPlusCircle } from '@fortawesome/free-solid-svg-
 import { ProductService } from 'src/app/services/product.service';
 import { Product } from '../../models/product.model';
 import { Category } from 'src/app/models/category.model';
+import { global } from 'src/app/services/global';
 
 //JQuery
 declare var $: any;
@@ -29,6 +30,38 @@ export class ProductsComponent {
   faTrash = faTrash;
   faPlusCircle = faPlusCircle;
 
+  public resetVar: boolean;
+  public token: any = this._datoService.getToken();
+  public url = global.url;
+
+  public afuConfig = <any>{
+    multiple: false,
+    formatsAllowed: '.jpg, .png, .gif, .jpeg',
+    maxSize: '50',
+    uploadAPI: {
+      url: this.url + '/api/upload/cloud/products',
+      method: 'POST',
+      headers: {
+        Authorization: `Bearer ${this.token}`,
+      },
+    },
+    theme: 'attachPin',
+    hideProgressBar: true,
+    hideResetBtn: true,
+    hideSelectBtn: false,
+    attachPinText: '',
+    replaceTexts: {
+      selectFileBtn: 'Selecciona archivos',
+      resetBtn: 'Resetear',
+      uploadBtn: 'Cargar',
+      dragNDropBox: 'Arrastrar y Soltar',
+      attachPinBtn: '',
+      afterUploadMsg_success: 'Cargado correctamente!',
+      afterUploadMsg_error: 'Falló la carga!',
+      sizeLimit: 'Límite excedido',
+    },
+  };
+
   constructor(public _datoService: ProductService, private _router: Router) {
     this.page_title = 'Productos';
     this.dato = new Product(0, '', 0, true, true, 0, new Category(0, '', false, '', undefined, undefined), '', undefined, undefined);
@@ -36,6 +69,7 @@ export class ProductsComponent {
     this.successMsg = '';
     this.datos = [];
     this.categories = [];
+    this.resetVar = true;
   }
 
   ngOnInit(): void {
@@ -71,7 +105,9 @@ export class ProductsComponent {
   }
 
   createDato() {
-    this.dato = new Product(0, '', 0, true, true, 0, new Category(0, '', false, '', undefined, undefined), '', undefined, undefined);
+    this.dato = new Product(0, '', 0, true, true, 0, this.categories[0], '', undefined, undefined);
+    console.log('dato', this.dato);
+    
     $('#createModal').modal('show');
   }
 
@@ -79,9 +115,15 @@ export class ProductsComponent {
     this._datoService.postProduct(this.dato).subscribe({
       next: (response) => {
         console.log(response);
-        this.successMsg = response.message;
-        createForm.reset();
-
+        this.datos.push(response.data);
+        this.successMsg = response.msg;
+        $('#createModal').modal('hide');
+        Swal.fire({
+          title: this.page_title,
+          text: response.msg ?? 'Todo bien!',
+          icon: 'success',
+          confirmButtonText: 'OK',
+        });
         setTimeout(() => {
           this.successMsg = '';
           this.errorMessages = [];
@@ -98,15 +140,25 @@ export class ProductsComponent {
             mensaje += error.error.errors[i].msg + '\n';
           }
         } else {
-          mensaje = error.error.message;
+          mensaje = error.error.msg;
         }
 
-        Swal.fire({
-          title: this.page_title,
-          text: mensaje ?? 'Todo mal!',
-          icon: 'error',
-          confirmButtonText: 'OK',
-        });
+        if(error.status == 401) {
+          Swal.fire({
+            title: this.page_title,
+            text: mensaje ?? error.error.msg,
+            showDenyButton: true,
+            confirmButtonText: 'Continuar',
+            denyButtonText: 'Cerrar Sesión'
+          }).then((result) => {
+            if (result.isDenied) {
+              this._router.navigate(['/logout/1']);
+            } 
+          });            
+        } else {
+          Swal.fire(this.page_title, mensaje ?? 'Todo mal!', 'error');
+        }
+        
       },
       
     });
@@ -122,13 +174,13 @@ export class ProductsComponent {
     this._datoService.update(this.dato).subscribe({
       next: (response) => {
         console.log(response);
-        this.dato = response.data;
-        editForm.reset();
+        // this.dato = response.data;
+        this.datos = this.datos.map(dato => (dato._id == response.data._id) ? dato = response.data : dato);
         $('#editModal').modal('hide');
 
         Swal.fire({
           title: this.page_title,
-          text: response.message ?? 'Todo bien!',
+          text: response.msg ?? 'Todo bien!',
           icon: 'success',
           confirmButtonText: 'OK',
         });
@@ -144,7 +196,7 @@ export class ProductsComponent {
             mensaje += error.error.errors[i].msg + '\n';
           }
         } else {
-          mensaje = error.error.message;
+          mensaje = error.error.msg;
         }
 
         Swal.fire({
@@ -169,12 +221,12 @@ export class ProductsComponent {
     this._datoService.delete(this.dato).subscribe({
       next: (response) => {
         console.log(response);
-        this.successMsg = response.message;
+        this.successMsg = response.msg;
         this.datos = this.datos.filter(product => product._id != this.dato._id);
         $('#deleteModal').modal('hide');
         Swal.fire({
           title: this.page_title,
-          text: response.message ?? 'Todo bien!',
+          text: response.msg ?? 'Todo bien!',
           icon: 'success',
           confirmButtonText: 'OK',
         });
@@ -190,7 +242,7 @@ export class ProductsComponent {
             mensaje += error.error.errors[i].msg + '\n';
           }
         } else {
-          mensaje = error.error.message;
+          mensaje = error.error.msg;
         }
 
         if(error.status == 401) {
@@ -212,6 +264,12 @@ export class ProductsComponent {
       },
       
     });
+  }
+
+  productUpload(evt: any) {
+    console.log(evt);
+    let myImage = evt.body.data;
+    this.dato.image = myImage;
   }
 
 }

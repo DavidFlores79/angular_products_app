@@ -50,8 +50,9 @@ export class LoginComponent implements OnInit{
          this._router.navigate(['/inicio']);
       },
       error: (error: HttpErrorResponse) => {
+        console.log('Login error', error);
         
-        this.errorMessages = error.error.errors;
+        this.errorMessages = error.error.errors ?? [ error.error ];
         console.log(this.errorMessages);
       },
       complete: () => console.info('complete') 

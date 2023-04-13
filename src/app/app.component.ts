@@ -14,7 +14,6 @@ export class AppComponent implements OnInit, DoCheck {
   public identity: any;
   public token: any;
   
-
   @ViewChild('content') content: any;
   
   constructor( public _userService: UserService ) {
@@ -27,6 +26,10 @@ export class AppComponent implements OnInit, DoCheck {
     $(window).on('resize', function() {
         $("#menuModal").modal("hide");
     });
+
+    $('.nav-item .nav-link').on('click', () => {
+      $("#menuModal").modal("hide");
+    })
   }
 
   ngDoCheck() {

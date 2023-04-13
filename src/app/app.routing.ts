@@ -11,19 +11,20 @@ import { UsersComponent } from './components/users/users.component';
 import { ProductsComponent } from './components/products/products.component';
 import { CategoriesComponent } from "./components/categories/categories.component";
 import { ChatComponent } from "./components/chat/chat.component";
+import { AuthGuard } from "./guards/auth.guard";
 
 //definir las rutas
 const appRoutes: Routes = [
     { path: '', component: LoginComponent, },
-    { path: 'inicio', component: HomeComponent, },
+    { path: 'inicio', component: HomeComponent, canActivate: [AuthGuard]},
     { path: 'login', component: LoginComponent, },
     { path: 'logout/:sure', component: LoginComponent, },
     { path: 'registro', component: RegisterComponent, },
-    { path: 'perfil', component: ProfileComponent, },
-    { path: 'usuarios', component: UsersComponent, },
-    { path: 'productos', component: ProductsComponent, },
-    { path: 'categorias', component: CategoriesComponent, },
-    { path: 'chat', component: ChatComponent, },
+    { path: 'perfil', component: ProfileComponent, canActivate: [AuthGuard]},
+    { path: 'usuarios', component: UsersComponent, canActivate: [AuthGuard]},
+    { path: 'productos', component: ProductsComponent, canActivate: [AuthGuard]},
+    { path: 'categorias', component: CategoriesComponent, canActivate: [AuthGuard]},
+    { path: 'chat', component: ChatComponent, canActivate: [AuthGuard]},
     { path: '**', component: ErrorComponent, },
 ];
 
