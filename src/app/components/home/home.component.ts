@@ -1,5 +1,6 @@
 import { HttpErrorResponse } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
+import { Title } from '@angular/platform-browser';
 import { Nom } from 'src/app/models/nom.model';
 import { NomService } from 'src/app/services/nom.service';
 import Swal from 'sweetalert2';
@@ -17,7 +18,7 @@ export class HomeComponent implements OnInit {
   public data: Nom;
   public noms: any;
 
-  constructor(private _nomService: NomService) {
+  constructor(private _nomService: NomService ) {
     this.page_title = 'Inicio';
     this.errorMessages = [];
     this.successMsg = '';
@@ -26,7 +27,7 @@ export class HomeComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    console.log('componente home lanzado!');
+    // console.log('componente home lanzado!');
     this.noms = [
       { id: '050', name: 'Norma 050'},
       { id: '051', name: 'Norma 051'},
@@ -34,10 +35,10 @@ export class HomeComponent implements OnInit {
   }
 
   onSubmit(nomForm: any) {
-    console.log(this.data);
+    // console.log(this.data);
     this._nomService.getNomFile(this.data).subscribe({
       next: (response) => {
-        console.log('response', response);
+        // console.log('response', response);
 
         /** Si salio bien es un archivo */
         // let url = window.URL.createObjectURL(response);
@@ -52,7 +53,7 @@ export class HomeComponent implements OnInit {
         nomForm.reset();
       },
       error: (error: HttpErrorResponse) => {
-        console.log('Error', error);
+        // console.log('Error', error);
 
         /** Si no hay conexion al server */
         if(error.status == 0) {
@@ -70,7 +71,7 @@ export class HomeComponent implements OnInit {
           fr.onload = (e) => {
             errorResponse = JSON.parse(e.target?.result as string);
             Swal.fire(this.page_title, errorResponse.message ?? 'Todo mal!', errorResponse.status ?? 'error');
-            console.log('error response', errorResponse );
+            // console.log('error response', errorResponse );
           };
           fr.readAsText(error.error);
         }

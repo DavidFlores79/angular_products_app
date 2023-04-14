@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-forbidden',
@@ -6,5 +7,11 @@ import { Component } from '@angular/core';
   styleUrls: ['./forbidden.component.css']
 })
 export class ForbiddenComponent {
+
+  constructor( private _router: Router ) {}
+
+  redirectHome() {
+    this._router.navigate(['inicio']);
+  }
 
 }

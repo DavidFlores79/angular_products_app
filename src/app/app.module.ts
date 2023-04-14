@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { routing, appRoutingProviders } from './app.routing';
-import { BrowserModule } from '@angular/platform-browser';
+import { BrowserModule, Title } from '@angular/platform-browser';
 import { FormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
 import { AngularFileUploaderModule } from "angular-file-uploader";
@@ -19,6 +19,7 @@ import { ChatComponent } from './components/chat/chat.component';
 import { AuthGuard } from './guards/auth.guard';
 import { UserService } from './services/user.service';
 import { ForbiddenComponent } from './components/forbidden/forbidden.component';
+import { MenuComponent } from './components/menu/menu.component';
 
 @NgModule({
   declarations: [
@@ -32,7 +33,8 @@ import { ForbiddenComponent } from './components/forbidden/forbidden.component';
     ProductsComponent,
     CategoriesComponent,
     ChatComponent,
-    ForbiddenComponent
+    ForbiddenComponent,
+    MenuComponent
   ],
   imports: [
     BrowserModule,
@@ -43,6 +45,6 @@ import { ForbiddenComponent } from './components/forbidden/forbidden.component';
     AngularFileUploaderModule
   ],
   bootstrap: [AppComponent],
-  providers: [ appRoutingProviders, AuthGuard, UserService ],
+  providers: [ appRoutingProviders, AuthGuard, UserService, Title ],
 })
 export class AppModule { }

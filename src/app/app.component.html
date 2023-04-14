@@ -3,23 +3,7 @@
   <div class="modal-dialog modal-dialog-centered">
     <div class="modal-content text-center p-3 text-secondary">
       <div class="modal-body">
-        <ul class="navbar-nav">
-          <li class="nav-item">
-            <a class="nav-link" [routerLink]="['/inicio']">Inicio <span class="sr-only">(current)</span></a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" [routerLink]="['/usuarios']">Usuarios</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" [routerLink]="['/categorias']">Categorías</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" [routerLink]="['/productos']">Productos</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" [routerLink]="['/chat']">Chat</a>
-          </li>
-        </ul>
+        <app-menu></app-menu>
       </div>
     </div>
   </div>
@@ -35,7 +19,7 @@
         <span class="navbar-toggler-icon"></span>
       </button>
       <!-- Brand -->
-      <a class="navbar-brand" href="">
+      <a class="navbar-brand" (click)="setDocTitle( 'Inicio' )" [routerLink]="['inicio']">
         <img class="" src="./assets/images/icons/favicon-32x32.png" alt="Logo Angular" height="45" />
       </a>
 
@@ -45,7 +29,7 @@
           <a class="nav-link" href="" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
             <div class="media align-items-center">
               <span class="" *ngIf="identity && identity.image.includes('http')">
-                <img width="50" class="rounded-circle" alt="Avatar" [src]="identity.image">
+                <img width="40" height="40" class="rounded-circle" alt="Avatar" [src]="identity.image">
               </span>
               <span class="" *ngIf="!identity || !identity.image.includes('http')">
                 <img class="rounded-circle" alt="Avatar" src="../assets/images/icons/favicon-32x32.png">
@@ -82,25 +66,10 @@
         </li>
       </ul>
 
+      <!-- <app-menu></app-menu> -->
       <div class="collapse navbar-collapse d-flex justify-content-start" id="navbarSupportedContent" *ngIf="identity">
         <div class="d-none d-lg-block">
-          <ul class="navbar-nav">
-            <li class="nav-item active">
-              <a class="nav-link" [routerLink]="['/inicio']">Inicio <span class="sr-only">(current)</span></a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" [routerLink]="['/usuarios']">Usuarios</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" [routerLink]="['/categorias']">Categorías</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" [routerLink]="['/productos']">Productos</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" [routerLink]="['/chat']">Chat</a>
-            </li>
-          </ul>
+          <app-menu></app-menu>
         </div>
       </div>
 
@@ -121,7 +90,7 @@
                     <span class="mb-0 text-white font-weight-bold user-name">{{ identity.name }}</span>
                   </div>
                   <span class="" *ngIf="identity && identity.image.includes('http')">
-                    <img width="50" class="rounded-circle" alt="Avatar" [src]="identity.image">
+                    <img width="40" height="40" class="rounded-circle" alt="Avatar" [src]="identity.image">
                   </span>
                   <span class="" *ngIf="!identity || !identity.image.includes('http')">
                     <img class="rounded-circle" alt="Avatar" src="../assets/images/icons/favicon-32x32.png">

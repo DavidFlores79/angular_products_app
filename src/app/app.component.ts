@@ -1,5 +1,6 @@
 import { Component, DoCheck, OnInit, ViewChild } from '@angular/core';
 import { UserService } from './services/user.service';
+import { Title } from '@angular/platform-browser';
 
 declare var $: any;
 
@@ -10,13 +11,13 @@ declare var $: any;
   providers: [ UserService ]
 })
 export class AppComponent implements OnInit, DoCheck {
-  title = 'App de Productos';
+  public page_title = 'Angular App';
   public identity: any;
   public token: any;
   
   @ViewChild('content') content: any;
   
-  constructor( public _userService: UserService ) {
+  constructor( public _userService: UserService, private _titleService: Title ) {
     this.loadUser();
   }
 
@@ -40,6 +41,11 @@ export class AppComponent implements OnInit, DoCheck {
   public loadUser() {
     this.identity = this._userService.getIdentity();
     this.token = this._userService.getToken();
+  }
+
+  setDocTitle(title: string) {
+    console.log('current title:::::' + this._titleService.getTitle());
+    this._titleService.setTitle(`Angular App | ${title}`);
   }
   
 }
