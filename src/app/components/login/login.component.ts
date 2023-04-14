@@ -4,6 +4,7 @@ import { UserService } from 'src/app/services/user.service';
 import { HttpErrorResponse } from '@angular/common/http';
 import { Router, ActivatedRoute, Params } from '@angular/router';
 import { AuthService } from 'src/app/services/auth.service';
+import { Title } from '@angular/platform-browser';
 
 
 @Component({
@@ -21,8 +22,8 @@ export class LoginComponent implements OnInit{
   public token: any;
   public identity: any;
 
-  constructor( private _authService: AuthService, private _router: Router, private _route: ActivatedRoute ) {
-    this.page_title = 'Identifícate';
+  constructor( private _authService: AuthService, private _router: Router, private _route: ActivatedRoute, private _titleService: Title ) {
+    this.page_title = 'Login';
     this.user = new User(0, '', '', '','','','USER_ROLE', true, false, '', '');
     this.errorMessages = [];
     this.successMsg = '';
@@ -31,7 +32,8 @@ export class LoginComponent implements OnInit{
   }
 
   public ngOnInit() {
-    console.log('componente login lanzado');
+    // console.log('componente login lanzado');
+    this._titleService.setTitle(`Angular App | ${this.page_title}`);
     this.logout();
   }
 
@@ -51,10 +53,10 @@ export class LoginComponent implements OnInit{
          this._router.navigate(['/inicio']);
       },
       error: (error: HttpErrorResponse) => {
-        console.log('Login error', error);
+        // console.log('Login error', error);
         
         this.errorMessages = error.error.errors ?? [ error.error ];
-        console.log(this.errorMessages);
+        // console.log(this.errorMessages);
       },
       complete: () => console.info('complete') 
     });

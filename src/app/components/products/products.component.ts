@@ -36,7 +36,7 @@ export class ProductsComponent {
 
   public afuConfig = <any>{
     multiple: false,
-    formatsAllowed: '.jpg, .png, .gif, .jpeg',
+    formatsAllowed: '.jpg, .png, .gif, .jpeg, .svg',
     maxSize: '50',
     uploadAPI: {
       url: this.url + '/api/upload/cloud/products',

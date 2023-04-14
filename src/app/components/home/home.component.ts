@@ -18,7 +18,7 @@ export class HomeComponent implements OnInit {
   public data: Nom;
   public noms: any;
 
-  constructor(private _nomService: NomService ) {
+  constructor(private _nomService: NomService, private _titleService: Title ) {
     this.page_title = 'Inicio';
     this.errorMessages = [];
     this.successMsg = '';
@@ -28,6 +28,7 @@ export class HomeComponent implements OnInit {
 
   ngOnInit(): void {
     // console.log('componente home lanzado!');
+    this._titleService.setTitle(`Angular App | ${this.page_title}`);
     this.noms = [
       { id: '050', name: 'Norma 050'},
       { id: '051', name: 'Norma 051'},
