@@ -22,7 +22,12 @@ export class LoginComponent implements OnInit{
   public token: any;
   public identity: any;
 
-  constructor( private _authService: AuthService, private _router: Router, private _route: ActivatedRoute, private _titleService: Title ) {
+  constructor( 
+    private _authService: AuthService, 
+    private _router: Router, 
+    private _route: ActivatedRoute, 
+    private _titleService: Title,
+  ) {
     this.page_title = 'Login';
     this.user = new User(0, '', '', '','','','USER_ROLE', true, false, '', '');
     this.errorMessages = [];
@@ -35,6 +40,9 @@ export class LoginComponent implements OnInit{
     // console.log('componente login lanzado');
     this._titleService.setTitle(`Angular App | ${this.page_title}`);
     this.logout();
+
+    if(this._authService.isLoggedIn$()) this._router.navigate(['inicio']);
+  
   }
 
   onSubmit(loginForm: any) {

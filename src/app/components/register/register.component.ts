@@ -1,5 +1,6 @@
 import { HttpErrorResponse } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 import { User } from 'src/app/models/user.model';
 import { AuthService } from 'src/app/services/auth.service';
 import { UserService } from 'src/app/services/user.service';
@@ -23,7 +24,7 @@ export class RegisterComponent implements OnInit{
   public successMsg: String;
   
 
-  constructor( private _authService: AuthService ) {
+  constructor( private _authService: AuthService, private _router: Router ) {
     this.page_title = 'Identifícate';
     this.user = new User(1, '', '', '','','','USER_ROLE', true, true, '', '');
     this.errorMessages = [];
@@ -31,14 +32,25 @@ export class RegisterComponent implements OnInit{
   }
 
   public ngOnInit() {
-    console.log('componente register lanzado');
+    this._authService.isLoggedIn$().subscribe({
+      next: (isLoggedIn) =>{
+        // console.log('next', isLoggedIn);
+        if(isLoggedIn) {
+          this._router.navigate(['inicio']);
+        } 
+     },
+     error: (error: HttpErrorResponse) => {       
+      //  console.log('error', error);
+     },
+    })
+
   }
 
   onSubmit(registerForm: any) {
 
     this._authService.register(this.user).subscribe({
       next: (response) =>{
-         console.log(response);
+        //  console.log(response);
          this.successMsg = response.message;
          registerForm.reset();
       },
@@ -52,7 +64,7 @@ export class RegisterComponent implements OnInit{
             this.errorMessages = error.error.errors;
             break;
         }
-        console.log(this.errorMessages);
+        // console.log(this.errorMessages);
       },
       complete: () => console.info('complete') 
     });    

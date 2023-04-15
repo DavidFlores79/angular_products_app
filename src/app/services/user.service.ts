@@ -29,7 +29,7 @@ export class UserService {
 
     getUsers(): Observable<any> {
 
-        let headers = new HttpHeaders().set('Content-Type', 'application/json');
+        let headers = new HttpHeaders().set('Content-Type', 'application/json').set('Authorization', `Bearer ${localStorage.getItem('token')}`);
         return this._http.get(this.url+'/api/users', { headers: headers});
 
     }

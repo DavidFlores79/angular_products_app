@@ -75,7 +75,7 @@ export class UsersComponent {
       '',
       '',
       '',
-      'USER_ROLE',
+      new Role(0, '', [], true, false, '', ''),
       true,
       false,
       '',
@@ -114,6 +114,28 @@ export class UsersComponent {
       },
       error: (error: HttpErrorResponse) => {
         console.log('error', error);
+        let mensaje = '';
+        if (error.error.errors && error.error.errors.length > 0) {
+          for (let i in error.error.errors) {
+            mensaje += error.error.errors[i].msg + '\n';
+          }
+        } else {
+          mensaje = error.error.msg;
+        }
+
+        switch (error.status) {
+          case 401:
+            Swal.fire(this.page_title, mensaje ?? 'Todo mal!', 'error');
+            this._router.navigate(['inicio']);              
+            break;
+          case 403:
+            this._router.navigate(['sin-acceso']);
+            break;
+        
+          default:
+            Swal.fire(this.page_title, mensaje ?? 'Todo mal!', 'error');
+            break;
+        }
       },
     });
   }
@@ -126,7 +148,7 @@ export class UsersComponent {
       '',
       '',
       '',
-      'USER_ROLE',
+      '',
       true,
       false,
       '',
@@ -136,6 +158,8 @@ export class UsersComponent {
   }
 
   postDato(createForm: any) {
+    console.log(this.dato);
+    // return;
     this._datoService.postUser(this.dato).subscribe({
       next: (response) => {
         console.log(response);

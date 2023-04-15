@@ -22,7 +22,7 @@ export class AppComponent implements OnInit, DoCheck {
   }
 
   public ngOnInit() {
-    console.log('componente login lanzado');
+    // console.log('componente login lanzado');
 
     $(window).on('resize', function() {
         $("#menuModal").modal("hide");
@@ -34,7 +34,7 @@ export class AppComponent implements OnInit, DoCheck {
   }
 
   ngDoCheck() {
-    console.log('doCheck');
+    // console.log('doCheck');
     this.loadUser();
   }
 
@@ -44,7 +44,7 @@ export class AppComponent implements OnInit, DoCheck {
   }
 
   setDocTitle(title: string) {
-    console.log('current title:::::' + this._titleService.getTitle());
+    // console.log('current title:::::' + this._titleService.getTitle());
     this._titleService.setTitle(`Angular App | ${title}`);
   }
   

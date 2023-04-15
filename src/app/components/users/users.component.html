@@ -32,7 +32,7 @@
                                 </td>
                                 <td>{{ dato.name }}</td>
                                 <td>{{ dato.email }}</td>
-                                <td>{{ dato.role }}</td>
+                                <td>{{ dato.role.name }}</td>
                                 <td class="d-flex justify-content-center">
                                     <button type="button" class="btn btn-outline-primary mx-1" (click)="editDato(dato)"
                                         data-toggle="tooltip" data-placement="top" title="Editar registro"
@@ -104,7 +104,8 @@
                                 <label for="role">Rol</label>
                                 <select name="role" class="form-control" #role="ngModel" [(ngModel)]="dato.role"
                                     autocomplete="role" autofocus required>
-                                    <option *ngFor="let role of roles; let i = index" [value]="role.name">
+                                    <option value="" disabled selected>Elija un perfil...</option>
+                                    <option *ngFor="let role of roles; let i = index" [value]="role._id">
                                         {{role.name}}
                                     </option>
                                 </select>
@@ -187,9 +188,9 @@
                                 <label for="role">Rol</label>
                                 <!-- <input type="text" name="role" class="form-control" #role="ngModel"
                                     [(ngModel)]="dato.role" autocomplete="role" autofocus required> -->
-                                <select name="role" class="form-control" #role="ngModel" [(ngModel)]="dato.role"
+                                <select name="role" class="form-control" #role="ngModel" [(ngModel)]="dato.role._id"
                                     autocomplete="role" autofocus required>
-                                    <option *ngFor="let role of roles; let i = index" [value]="role.name">
+                                    <option *ngFor="let role of roles; let i = index" [value]="role._id">
                                         {{role.name}}
                                     </option>
                                 </select>
