@@ -1,9 +1,10 @@
 import { Injectable } from '@angular/core';
 import { UserService } from './user.service';
 import { global } from './global';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { HttpClient, HttpErrorResponse, HttpHeaders } from '@angular/common/http';
 import { Observable, of } from 'rxjs';
 import { User } from '../models/user.model';
+import { MenuService } from './menu.service';
 
 @Injectable({
   providedIn: 'root',
@@ -11,7 +12,7 @@ import { User } from '../models/user.model';
 export class AuthService {
   url: string;
 
-  constructor(private _userService: UserService, public _http: HttpClient) {
+  constructor(private _userService: UserService, public _http: HttpClient, private _menuService: MenuService) {
     this.url = global.url;
   }
 
@@ -39,7 +40,7 @@ export class AuthService {
 
   isAdmin$(): Observable<boolean> {
     let identity: User = this._userService.getIdentity();
-    if (identity.role != 'ADMIN_ROLE') return of(false);
+    if (identity.role.name != 'ADMIN_ROLE') return of(false);
     return of(true);
   }
 }

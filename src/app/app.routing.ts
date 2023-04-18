@@ -14,6 +14,8 @@ import { ChatComponent } from "./components/chat/chat.component";
 import { AuthGuard } from "./guards/auth.guard";
 import { AdminGuard } from "./guards/admin.guard";
 import { ForbiddenComponent } from "./components/forbidden/forbidden.component";
+import { RouteGuard } from "./guards/route.guard";
+import { ModulesComponent } from "./components/modules/modules.component";
 
 //definir las rutas
 const appRoutes: Routes = [
@@ -26,6 +28,7 @@ const appRoutes: Routes = [
     { path: 'usuarios', component: UsersComponent, canActivate: [AuthGuard]},
     { path: 'productos', component: ProductsComponent, canActivate: [AuthGuard, AdminGuard]},
     { path: 'categorias', component: CategoriesComponent, canActivate: [AuthGuard]},
+    { path: 'modulos', component: ModulesComponent, canActivate: [AuthGuard]},
     { path: 'chat', component: ChatComponent, canActivate: [AuthGuard]},
     { path: 'sin-acceso', component: ForbiddenComponent},
     { path: '**', component: ErrorComponent, },

@@ -20,6 +20,7 @@ import { AuthGuard } from './guards/auth.guard';
 import { UserService } from './services/user.service';
 import { ForbiddenComponent } from './components/forbidden/forbidden.component';
 import { MenuComponent } from './components/menu/menu.component';
+import { ModulesComponent } from './components/modules/modules.component';
 
 @NgModule({
   declarations: [
@@ -34,7 +35,8 @@ import { MenuComponent } from './components/menu/menu.component';
     CategoriesComponent,
     ChatComponent,
     ForbiddenComponent,
-    MenuComponent
+    MenuComponent,
+    ModulesComponent
   ],
   imports: [
     BrowserModule,
