@@ -1,3 +1,5 @@
+@import "../node_modules/bootstrap-select/dist/css/bootstrap-select.css";
+
 /* You can add global styles to this file, and also import other style files */
 body {
   font-family: "Poppins", sans-serif;
@@ -11,7 +13,7 @@ body {
   background: rgba(0, 0, 0, 0.5) !important;
 }
 
-.modal label, .modal input, .modal select, button[type=submit], .btn.btn-danger, .modal .modal-body {
+.modal label, .modal input, .modal select, button[type=submit], .btn.btn-danger, .btn.btn-primary, .modal .modal-body {
   font-size: 0.8rem;
 }
 

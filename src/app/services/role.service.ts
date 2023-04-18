@@ -20,14 +20,28 @@ export class RoleService {
         return "Hola mundo desde el servicio Roles!";
     }
 
-    getRoles(): Observable<any> {
+    getDatos(): Observable<any> {
 
         let headers = new HttpHeaders().set('Content-Type', 'application/json');
         return this._http.get(this.url+'/api/roles', { headers: headers});
 
     }
 
-    postRole( role: Role ): Observable<any> {
+    getModules(): Observable<any> {
+
+        let headers = new HttpHeaders().set('Content-Type', 'application/json');
+        return this._http.get(this.url+'/api/modules', { headers: headers});
+
+    }
+
+    getPermissions(): Observable<any> {
+
+        let headers = new HttpHeaders().set('Content-Type', 'application/json');
+        return this._http.get(this.url+'/api/permissions', { headers: headers});
+
+    }
+
+    postDato( role: Role ): Observable<any> {
 
         let body = role;
         let headers = new HttpHeaders().set('Content-Type', 'application/json');

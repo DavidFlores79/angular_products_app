@@ -3,75 +3,99 @@ import { Component } from '@angular/core';
 import { HttpErrorResponse } from '@angular/common/http';
 import Swal from 'sweetalert2';
 import { Router } from '@angular/router';
-import { faPencilAlt, faTrash, faPlusCircle } from '@fortawesome/free-solid-svg-icons';
+import {
+  faPencilAlt,
+  faTrash,
+  faPlusCircle, faTh, faUserLock
+} from '@fortawesome/free-solid-svg-icons';
 //Del CRUD
 import { global } from 'src/app/services/global';
-import { ModuleService } from 'src/app/services/module.service';
+import { RoleService } from 'src/app/services/role.service';
+import { Role } from 'src/app/models/role.model';
 import { Module } from 'src/app/models/module.model';
+import { Permission } from 'src/app/models/permission.model';
 
 //JQuery
 declare var $: any;
 
 @Component({
-  selector: 'app-modules',
-  templateUrl: './modules.component.html',
-  styleUrls: ['./modules.component.css'],
-  providers: [ModuleService], //Para user el Servicio
+  selector: 'app-roles',
+  templateUrl: './roles.component.html',
+  styleUrls: ['./roles.component.css'],
+  providers: [RoleService], //Para user el Servicio
 })
-export class ModulesComponent {
+export class RolesComponent {
   public page_title: string;
-  public dato: Module;
-  public datos: Module[];
+  public dato: Role;
+  public datos: Role[];
+  public appModules: Module[];
+  public appPermissions: Permission[];
+  public modules_selected: any[] = [];
+  public edit_module: any;
+  public permissions: any[];
   public errorMessages: any;
   public successMsg: string;
   faPencilAlt = faPencilAlt;
   faTrash = faTrash;
   faPlusCircle = faPlusCircle;
+  faTh = faTh;
+  faUserLock = faUserLock;
 
   public resetVar: boolean;
   public token: any = this._datoService.getToken();
   public url = global.url;
 
-  public afuConfig = <any>{
-    multiple: false,
-    formatsAllowed: '.jpg, .png, .gif, .jpeg, .svg',
-    maxSize: '50',
-    uploadAPI: {
-      url: this.url + '/api/upload/cloud/modules',
-      method: 'POST',
-      headers: {
-        Authorization: `Bearer ${this.token}`,
-      },
-    },
-    theme: 'attachPin',
-    hideProgressBar: true,
-    hideResetBtn: true,
-    hideSelectBtn: false,
-    attachPinText: '',
-    replaceTexts: {
-      selectFileBtn: 'Selecciona archivos',
-      resetBtn: 'Resetear',
-      uploadBtn: 'Cargar',
-      dragNDropBox: 'Arrastrar y Soltar',
-      attachPinBtn: '',
-      afterUploadMsg_success: 'Cargado correctamente!',
-      afterUploadMsg_error: 'Falló la carga!',
-      sizeLimit: 'Límite excedido',
-    },
-  };
-
-  constructor(public _datoService: ModuleService, private _router: Router) {
-    this.page_title = 'Módulos';
-    this.dato = new Module(0, '', '', '', true, undefined, undefined);
+  constructor(public _datoService: RoleService, private _router: Router) {
+    this.page_title = 'Roles';
+    this.dato = new Role(0, '', [], true, false, undefined, undefined);
     this.errorMessages = [];
     this.successMsg = '';
     this.datos = [];
+    this.appModules = [];
+    this.appPermissions = [];
+    this.permissions = [];
     this.resetVar = true;
   }
 
+  public ngAfterViewInit(): void {
+    console.log('ngAfterViewInit...');
+  }
+
   ngOnInit(): void {
-    console.log('componente Usuarios lanzado!');
+    console.log('componente roles lanzado!');
+    this.getModules();
+    this.getPermissions();
     this.getDatos();
+  }
+
+  getModules() {
+    this._datoService.getModules().subscribe({
+      next: (response) => {
+        console.log('modules response', response);
+        this.appModules = response.data;
+        setTimeout(() => {
+          $('.selectpicker').selectpicker('refresh');
+        }, 150);
+      },
+      error: (error: HttpErrorResponse) => {
+        console.log('error', error);
+      },
+    });
+  }
+  
+  getPermissions() {
+    this._datoService.getPermissions().subscribe({
+      next: (response) => {
+        console.log('permissions response', response);
+        this.appPermissions = response.data;
+        setTimeout(() => {
+          $('.selectpicker').selectpicker('refresh');
+        }, 150);
+      },
+      error: (error: HttpErrorResponse) => {
+        console.log('error', error);
+      },
+    });
   }
 
   getDatos() {
@@ -83,18 +107,18 @@ export class ModulesComponent {
       error: (error: HttpErrorResponse) => {
         console.log('error', error);
       },
-      
     });
   }
 
   createDato() {
-    this.dato = this.dato = new Module(0, '', '', '', true, undefined, undefined);
+    this.dato = new Role(0, '', [], true, false, undefined, undefined);
     console.log('dato', this.dato);
-    
     $('#createModal').modal('show');
   }
 
   postDato(createForm: any) {
+    // console.log(this.dato); return;
+
     this._datoService.postDato(this.dato).subscribe({
       next: (response) => {
         console.log(response);
@@ -110,6 +134,7 @@ export class ModulesComponent {
         setTimeout(() => {
           this.successMsg = '';
           this.errorMessages = [];
+          $('.selectpicker').val('default').selectpicker('refresh'); // refresh the selectpicker with fetched courses
         }, 3000);
       },
       error: (error: HttpErrorResponse) => {
@@ -117,8 +142,7 @@ export class ModulesComponent {
 
         $('#createModal').modal('hide');
         let mensaje = '';
-        if(error.error.errors &&  error.error.errors.length > 0) {
-          
+        if (error.error.errors && error.error.errors.length > 0) {
           for (let i in error.error.errors) {
             mensaje += error.error.errors[i].msg + '\n';
           }
@@ -126,39 +150,48 @@ export class ModulesComponent {
           mensaje = error.error.msg;
         }
 
-        if(error.status == 401) {
+        if (error.status == 401) {
           Swal.fire({
             title: this.page_title,
             text: mensaje ?? error.error.msg,
             showDenyButton: true,
             confirmButtonText: 'Continuar',
-            denyButtonText: 'Cerrar Sesión'
+            denyButtonText: 'Cerrar Sesión',
           }).then((result) => {
             if (result.isDenied) {
               this._router.navigate(['/logout/1']);
-            } 
-          });            
+            }
+          });
         } else {
           Swal.fire(this.page_title, mensaje ?? 'Todo mal!', 'error');
         }
-        
       },
-      
     });
   }
 
-  editDato(module: Module) {
-    console.log('module', module);
-    this.dato = module;
+  editDato(role: Role) {
+    console.log('module', role);
+    this.dato = role;
+    this.modules_selected = this.dato.modules.map((s: { _id: Role }) =>
+      s._id ? s._id : s
+    );
+    setTimeout(() => {
+      $('.selectpicker').selectpicker('refresh');
+    }, 150);
     $('#editModal').modal('show');
   }
 
   updateDato(editForm: any) {
-    this._datoService.update(this.dato).subscribe({
+    console.log('editForm', editForm.value);
+    // return;
+    editForm.value._id = this.dato._id; //asignar el id del rol al objeto para actualizar.
+    this._datoService.update(editForm.value).subscribe({
       next: (response) => {
         console.log(response);
         // this.dato = response.data;
-        this.datos = this.datos.map(dato => (dato._id == response.data._id) ? dato = response.data : dato);
+        this.datos = this.datos.map((dato) =>
+          dato._id == response.data._id ? (dato = response.data) : dato
+        );
         $('#editModal').modal('hide');
 
         Swal.fire({
@@ -173,8 +206,7 @@ export class ModulesComponent {
 
         $('#editModal').modal('hide');
         let mensaje = '';
-        if(error.error.errors &&  error.error.errors.length > 0) {
-          
+        if (error.error.errors && error.error.errors.length > 0) {
           for (let i in error.error.errors) {
             mensaje += error.error.errors[i].msg + '\n';
           }
@@ -189,23 +221,22 @@ export class ModulesComponent {
           confirmButtonText: 'OK',
         });
       },
-      
     });
   }
 
-  confirmDelete(module: Module) {
-    this.dato = module;
+  confirmDelete(role: Role) {
+    this.dato = role;
     $('#deleteModal').modal('show');
   }
 
   deleteDato() {
-    console.log('product', this.dato);
+    console.log('role', this.dato);
 
     this._datoService.delete(this.dato).subscribe({
       next: (response) => {
         console.log(response);
         this.successMsg = response.msg;
-        this.datos = this.datos.filter(product => product._id != this.dato._id);
+        this.datos = this.datos.filter((role) => role._id != this.dato._id);
         $('#deleteModal').modal('hide');
         Swal.fire({
           title: this.page_title,
@@ -219,8 +250,7 @@ export class ModulesComponent {
 
         $('#deleteModal').modal('hide');
         let mensaje = '';
-        if(error.error.errors && error.error.errors.length > 0) {
-          
+        if (error.error.errors && error.error.errors.length > 0) {
           for (let i in error.error.errors) {
             mensaje += error.error.errors[i].msg + '\n';
           }
@@ -228,30 +258,36 @@ export class ModulesComponent {
           mensaje = error.error.msg;
         }
 
-        if(error.status == 401) {
+        if (error.status == 401) {
           Swal.fire({
             title: this.page_title,
             text: mensaje,
             showDenyButton: true,
             confirmButtonText: 'Continuar',
-            denyButtonText: 'Cerrar Sesión'
+            denyButtonText: 'Cerrar Sesión',
           }).then((result) => {
             if (result.isDenied) {
               this._router.navigate(['/logout/1']);
-            } 
-          });            
+            }
+          });
         } else {
           Swal.fire(this.page_title, mensaje ?? 'Todo mal!', 'error');
         }
-        
       },
-      
     });
   }
 
-  imageUpload(evt: any) {
-    console.log(evt);
-    let myImage = evt.body.data;
-    this.dato.image = myImage;
+  addPermissions(role: Role) {
+    console.log(role);
+    this.dato = role;
+    setTimeout(() => {
+      $('.selectpicker').selectpicker('refresh');
+    }, 150);
+    $('#permissionsModal').modal('show');
+  }
+
+  savePermissions(permissionsForm: any) {
+    console.log('guardar!', permissionsForm);
+    
   }
 }

@@ -21,6 +21,7 @@ import { UserService } from './services/user.service';
 import { ForbiddenComponent } from './components/forbidden/forbidden.component';
 import { MenuComponent } from './components/menu/menu.component';
 import { ModulesComponent } from './components/modules/modules.component';
+import { RolesComponent } from './components/roles/roles.component';
 
 @NgModule({
   declarations: [
@@ -36,7 +37,8 @@ import { ModulesComponent } from './components/modules/modules.component';
     ChatComponent,
     ForbiddenComponent,
     MenuComponent,
-    ModulesComponent
+    ModulesComponent,
+    RolesComponent
   ],
   imports: [
     BrowserModule,

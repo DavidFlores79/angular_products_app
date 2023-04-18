@@ -5,38 +5,47 @@
                 <h5 class="font-weight-bold centers-title">
                     {{ page_title }}
                 </h5>
-                <button type="button" class="btn btn-outline-success" (click)="createDato()"
-                    data-toggle="tooltip" data-placement="top" title="Crear registro"
-                    onmouseenter="$(this).tooltip('show')" onmouseleave="$(this).tooltip('hide')">
+                <button type="button" class="btn btn-outline-success" (click)="createDato()" data-toggle="tooltip"
+                    data-placement="top" title="Crear registro" onmouseenter="$(this).tooltip('show')"
+                    onmouseleave="$(this).tooltip('hide')">
                     Crear {{ page_title }} <fa-icon [icon]="faPlusCircle"></fa-icon>
                 </button>
             </div>
             <div class="card-body">
-                <input type="text" name="buscar" class="search-query form-control col-lg-3 col-md-4 col-sm-12 mb-3" placeholder="Buscar..." ng-model="searchQuery">
+                <input type="text" name="buscar" class="search-query form-control col-lg-3 col-md-4 col-sm-12 mb-3"
+                    placeholder="Buscar..." ng-model="searchQuery">
                 <div class="table-responsive">
                     <table class="table table-striped">
                         <thead>
                             <tr>
-                                <th scope="col">IMG</th>
                                 <th scope="col">Nombre</th>
-                                <th scope="col">Ruta</th>
+                                <th scope="col">Módulos</th>
                                 <th class="text-center" scope="col">Opciones</th>
                             </tr>
                         </thead>
                         <tbody>
                             <tr *ngFor="let dato of datos">
-                                <td><img class="border" width="30" height="30" src="{{ dato.image }}" alt=""  *ngIf="dato && dato.image"></td>
                                 <td>{{ dato.name }}</td>
-                                <td>{{ dato.route }}</td>
+                                <td>
+                                    <span class="badge badge-info mx-1" *ngFor="let module of dato.modules">{{
+                                        module.name }}</span>
+                                </td>
                                 <td class="d-flex justify-content-center">
-                                    <button type="button" class="btn btn-outline-primary mx-1" (click)="editDato(dato)"
-                                        data-toggle="tooltip" data-placement="top" title="Editar registro"
+                                    <button type="button" class="btn btn-outline-primary mr-1" (click)="editDato(dato)"
+                                        data-toggle="tooltip" data-placement="left" title="Editar y Asignar Modulos a {{ dato.name }}"
                                         onmouseenter="$(this).tooltip('show')" onmouseleave="$(this).tooltip('hide')">
-                                        <fa-icon [icon]="faPencilAlt"></fa-icon>
+                                        <fa-icon [icon]="faTh"></fa-icon>
                                     </button>
-                                    <button type="button" class="btn btn-outline-danger" (click)="confirmDelete(dato)"
-                                        data-toggle="tooltip" data-placement="top" title="Eliminar registro"
-                                        onmouseenter="$(this).tooltip('show')" onmouseleave="$(this).tooltip('hide')">
+                                    <button type="button" class="btn btn-outline-info mr-1"
+                                        (click)="addPermissions(dato)" data-toggle="tooltip" data-placement="top"
+                                        title="Asignar Permisos" onmouseenter="$(this).tooltip('show')"
+                                        onmouseleave="$(this).tooltip('hide')">
+                                        <fa-icon [icon]="faUserLock"></fa-icon>
+                                    </button>
+                                    <button type="button" class="btn btn-outline-danger mr-1"
+                                        (click)="confirmDelete(dato)" data-toggle="tooltip" data-placement="top"
+                                        title="Eliminar registro" onmouseenter="$(this).tooltip('show')"
+                                        onmouseleave="$(this).tooltip('hide')">
                                         <fa-icon [icon]="faTrash"></fa-icon>
                                     </button>
                                 </td>
@@ -71,14 +80,6 @@
                     </div>
                     <div class="row">
                         <div class="col">
-                            <div class="d-flex justify-content-center align-items-center">
-                                <div class="image-container">
-                                    <img class="rounded border" src="{{ dato.image }}" alt=""  *ngIf="dato && dato.image">
-                                    <img class="rounded border" src="https://res.cloudinary.com/dltvxi4tm/image/upload/v1680155130/products/up8ji7twwgvk41k5vgrm.png" alt=""  *ngIf="dato.image == ''">
-                                    <angular-file-uploader class="fileuploader" [config]="afuConfig" [resetUpload]=resetVar (ApiResponse)="imageUpload($event)">
-                                    </angular-file-uploader>
-                                </div>
-                            </div>
                             <div class="form-group">
                                 <label for="name">Nombre</label>
                                 <input type="text" minlength="3" name="name" class="form-control" #name="ngModel"
@@ -87,13 +88,19 @@
                                     <strong>Obligatorio. Mínimo 3 caracteres.</strong>
                                 </span>
                             </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col">
                             <div class="form-group">
-                                <label for="route">Ruta</label>
-                                <input type="text" minlength="3" name="route" class="form-control" #route="ngModel"
-                                    [(ngModel)]="dato.route" autocomplete="route" autofocus required>
-                                <span *ngIf="!route.valid && route.touched" class="invalid-feedback" role="alert">
-                                    <strong>Obligatorio. Mínimo 3 caracteres.</strong>
-                                </span>
+                                <label for="name">Módulos Asignados</label>
+                                <!-- <input type="text" minlength="3" name="name" class="form-control" #name="ngModel"
+                                    [(ngModel)]="dato.name" autocomplete="name" autofocus required> -->
+                                <select name="modules" class="form-control selectpicker" [(ngModel)]="dato.modules"
+                                    multiple="multiple">
+                                    <option [ngValue]="module._id" *ngFor="let module of appModules">{{module.name}}
+                                    </option>
+                                </select>
                             </div>
                         </div>
                     </div>
@@ -113,7 +120,7 @@
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="editModalLabel">Editar {{ page_title }}</h5>
+                <h5 class="modal-title" id="editModalLabel">Asignar Módulos a {{ page_title }}</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
@@ -130,14 +137,6 @@
                     </div>
                     <div class="row">
                         <div class="col">
-                            <div class="d-flex justify-content-center align-items-center">
-                                <div class="image-container">
-                                    <img class="rounded border" src="{{ dato.image }}" alt=""  *ngIf="dato && dato.image">
-                                    <img class="rounded border" src="https://res.cloudinary.com/dltvxi4tm/image/upload/v1680155130/products/up8ji7twwgvk41k5vgrm.png" alt=""  *ngIf="dato.image == ''">
-                                    <angular-file-uploader class="fileuploader" [config]="afuConfig" [resetUpload]=resetVar (ApiResponse)="imageUpload($event)">
-                                    </angular-file-uploader>
-                                </div>
-                            </div>
                             <div class="form-group">
                                 <label for="name">Nombre</label>
                                 <input type="text" minlength="3" name="name" class="form-control" #name="ngModel"
@@ -146,18 +145,22 @@
                                     <strong>Obligatorio. Mínimo 3 caracteres.</strong>
                                 </span>
                             </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col">
                             <div class="form-group">
-                                <label for="route">Ruta</label>
-                                <input type="text" minlength="3" name="route" class="form-control" #route="ngModel"
-                                    [(ngModel)]="dato.route" autocomplete="route" autofocus required>
-                                <span *ngIf="!route.valid && route.touched" class="invalid-feedback" role="alert">
-                                    <strong>Obligatorio. Mínimo 3 caracteres.</strong>
-                                </span>
+                                <label for="name">Módulos Asignados</label>
+                                <select name="modules" class="form-control selectpicker editDato"
+                                    [(ngModel)]="modules_selected" multiple="multiple">
+                                    <option [ngValue]="module._id" *ngFor="let module of appModules">{{module.name}}
+                                    </option>
+                                </select>
                             </div>
                         </div>
                     </div>
                     <div class="form-group text-right">
-                        <button type="submit" [disabled]="editForm.invalid" class="btn btn-primary btn-block">
+                        <button type="submit" [disabled]="editForm.invalid" class="btn btn-primary">
                             Actualizar
                         </button>
                     </div>
@@ -183,6 +186,60 @@
             <div class="modal-footer">
                 <button type="button" class="btn btn-danger" (click)="deleteDato()">Eliminar</button>
             </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal Permisos -->
+<div class="modal fade" id="permissionsModal" tabindex="-1" aria-labelledby="permissionsModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="permissionsModalLabel">Asignar Permisos a {{ page_title }}</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form #permissionsForm="ngForm" (ngSubmit)="savePermissions(permissionsForm)" class="was-validated">
+                    <div class="card-text alert alert-danger" *ngIf="errorMessages.length > 0" id="error" role="alert">
+                        <div *ngFor="let error of errorMessages">
+                            <small>{{ error.msg }}</small>
+                        </div>
+                    </div>
+                    <div class="card-text alert alert-success" *ngIf="successMsg != ''" id="error" role="alert">
+                        <small>{{ successMsg }}</small>
+                    </div>
+                    <div class="row">
+                        <div class="col">
+                            <div class="form-group">
+                                <label for="name">Módulos</label>
+                                <select name="module" class="form-control selectpicker" [(ngModel)]="edit_module">
+                                    <option [ngValue]="module._id" *ngFor="let module of dato.modules">{{module.name}}</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col">
+                            <div class="form-group">
+                                <label for="name">Permisos</label>
+                                <select name="permissions" class="form-control selectpicker" [(ngModel)]="permissions" multiple>
+                                    <option [ngValue]="permission._id" *ngFor="let permission of appPermissions">{{permission.name}}</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group text-right">
+                        <button type="submit" [disabled]="editForm.invalid" class="btn btn-primary">
+                            Guardar
+                        </button>
+                    </div>
+                </form>
+            </div>
+            <!-- <div class="modal-footer">
+                <button type="button" class="btn btn-primary" (click)="savePermissions()">Guardar</button>
+            </div> -->
         </div>
     </div>
 </div>
