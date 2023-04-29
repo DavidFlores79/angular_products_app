@@ -32,12 +32,12 @@
                                 </td>
                                 <td class="d-flex justify-content-center">
                                     <button type="button" class="btn btn-outline-primary mr-1" (click)="editDato(dato)"
-                                        data-toggle="tooltip" data-placement="left" title="Editar y Asignar Modulos a {{ dato.name }}"
+                                        data-toggle="tooltip" data-placement="left" title="Editar {{ dato.name }}"
                                         onmouseenter="$(this).tooltip('show')" onmouseleave="$(this).tooltip('hide')">
                                         <fa-icon [icon]="faTh"></fa-icon>
                                     </button>
                                     <button type="button" class="btn btn-outline-info mr-1"
-                                        (click)="addPermissions(dato)" data-toggle="tooltip" data-placement="top"
+                                        (click)="profileModal(dato)" data-toggle="tooltip" data-placement="top"
                                         title="Asignar Permisos" onmouseenter="$(this).tooltip('show')"
                                         onmouseleave="$(this).tooltip('hide')">
                                         <fa-icon [icon]="faUserLock"></fa-icon>
@@ -90,20 +90,6 @@
                             </div>
                         </div>
                     </div>
-                    <div class="row">
-                        <div class="col">
-                            <div class="form-group">
-                                <label for="name">Módulos Asignados</label>
-                                <!-- <input type="text" minlength="3" name="name" class="form-control" #name="ngModel"
-                                    [(ngModel)]="dato.name" autocomplete="name" autofocus required> -->
-                                <select name="modules" class="form-control selectpicker" [(ngModel)]="dato.modules"
-                                    multiple="multiple">
-                                    <option [ngValue]="module._id" *ngFor="let module of appModules">{{module.name}}
-                                    </option>
-                                </select>
-                            </div>
-                        </div>
-                    </div>
                     <div class="form-group text-right">
                         <button type="submit" [disabled]="editForm.invalid" class="btn btn-primary btn-block">
                             Guardar
@@ -147,18 +133,6 @@
                             </div>
                         </div>
                     </div>
-                    <div class="row">
-                        <div class="col">
-                            <div class="form-group">
-                                <label for="name">Módulos Asignados</label>
-                                <select name="modules" class="form-control selectpicker editDato"
-                                    [(ngModel)]="modules_selected" multiple="multiple">
-                                    <option [ngValue]="module._id" *ngFor="let module of appModules">{{module.name}}
-                                    </option>
-                                </select>
-                            </div>
-                        </div>
-                    </div>
                     <div class="form-group text-right">
                         <button type="submit" [disabled]="editForm.invalid" class="btn btn-primary">
                             Actualizar
@@ -191,17 +165,18 @@
 </div>
 
 <!-- Modal Permisos -->
-<div class="modal fade" id="permissionsModal" tabindex="-1" aria-labelledby="permissionsModalLabel" aria-hidden="true">
+<div class="modal fade" id="profileModal" tabindex="-1" aria-labelledby="profileModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="permissionsModalLabel">Asignar Permisos a {{ page_title }}</h5>
+                <h5 class="modal-title" id="profileModalLabel">Permisos ({{ this.dato.name }})</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
             <div class="modal-body">
-                <form #permissionsForm="ngForm" (ngSubmit)="savePermissions(permissionsForm)" class="was-validated">
+
+                <form #permissionsForm="ngForm" (ngSubmit)="saveProfile(permissionsForm)" class="was-validated">
                     <div class="card-text alert alert-danger" *ngIf="errorMessages.length > 0" id="error" role="alert">
                         <div *ngFor="let error of errorMessages">
                             <small>{{ error.msg }}</small>
@@ -210,36 +185,40 @@
                     <div class="card-text alert alert-success" *ngIf="successMsg != ''" id="error" role="alert">
                         <small>{{ successMsg }}</small>
                     </div>
-                    <div class="row">
-                        <div class="col">
-                            <div class="form-group">
-                                <label for="name">Módulos</label>
-                                <select name="module" class="form-control selectpicker" [(ngModel)]="edit_module">
-                                    <option [ngValue]="module._id" *ngFor="let module of dato.modules">{{module.name}}</option>
-                                </select>
-                            </div>
-                        </div>
+                    <span></span>
+                    <div class="table-responsive">
+                        <table class="table table-striped">
+                            <thead>
+                                <tr>
+                                    <th scope="col">Módulos</th>
+                                    <th scope="col">Permisos</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr *ngFor="let module of appModules; let i = index">
+                                    <td>{{ module.name }}</td>
+                                    <td>
+                                        <select name="permissions-{{i}}" class="form-control selectpicker"
+                                            [(ngModel)]="permissions[i]" multiple>
+                                            <option [value]="permission._id"
+                                                *ngFor="let permission of appPermissions">{{permission.name}}
+                                            </option>
+                                        </select>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
                     </div>
-                    <div class="row">
-                        <div class="col">
-                            <div class="form-group">
-                                <label for="name">Permisos</label>
-                                <select name="permissions" class="form-control selectpicker" [(ngModel)]="permissions" multiple>
-                                    <option [ngValue]="permission._id" *ngFor="let permission of appPermissions">{{permission.name}}</option>
-                                </select>
-                            </div>
-                        </div>
-                    </div>
+
                     <div class="form-group text-right">
                         <button type="submit" [disabled]="editForm.invalid" class="btn btn-primary">
                             Guardar
                         </button>
                     </div>
                 </form>
+
+
             </div>
-            <!-- <div class="modal-footer">
-                <button type="button" class="btn btn-primary" (click)="savePermissions()">Guardar</button>
-            </div> -->
         </div>
     </div>
 </div>

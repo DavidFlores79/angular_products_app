@@ -6,7 +6,9 @@ import { Router } from '@angular/router';
 import {
   faPencilAlt,
   faTrash,
-  faPlusCircle, faTh, faUserLock
+  faPlusCircle,
+  faTh,
+  faUserLock,
 } from '@fortawesome/free-solid-svg-icons';
 //Del CRUD
 import { global } from 'src/app/services/global';
@@ -14,6 +16,7 @@ import { RoleService } from 'src/app/services/role.service';
 import { Role } from 'src/app/models/role.model';
 import { Module } from 'src/app/models/module.model';
 import { Permission } from 'src/app/models/permission.model';
+import { Profile } from 'src/app/models/profile.model';
 
 //JQuery
 declare var $: any;
@@ -30,11 +33,11 @@ export class RolesComponent {
   public datos: Role[];
   public appModules: Module[];
   public appPermissions: Permission[];
-  public modules_selected: any[] = [];
-  public edit_module: any;
+  public modulesPermissions: Profile[];
   public permissions: any[];
   public errorMessages: any;
   public successMsg: string;
+  public saveAndExit: boolean;
   faPencilAlt = faPencilAlt;
   faTrash = faTrash;
   faPlusCircle = faPlusCircle;
@@ -55,6 +58,8 @@ export class RolesComponent {
     this.appPermissions = [];
     this.permissions = [];
     this.resetVar = true;
+    this.saveAndExit = false;
+    this.modulesPermissions = [];
   }
 
   public ngAfterViewInit(): void {
@@ -82,7 +87,7 @@ export class RolesComponent {
       },
     });
   }
-  
+
   getPermissions() {
     this._datoService.getPermissions().subscribe({
       next: (response) => {
@@ -172,12 +177,6 @@ export class RolesComponent {
   editDato(role: Role) {
     console.log('module', role);
     this.dato = role;
-    this.modules_selected = this.dato.modules.map((s: { _id: Role }) =>
-      s._id ? s._id : s
-    );
-    setTimeout(() => {
-      $('.selectpicker').selectpicker('refresh');
-    }, 150);
     $('#editModal').modal('show');
   }
 
@@ -277,17 +276,78 @@ export class RolesComponent {
     });
   }
 
-  addPermissions(role: Role) {
-    console.log(role);
-    this.dato = role;
-    setTimeout(() => {
-      $('.selectpicker').selectpicker('refresh');
-    }, 150);
-    $('#permissionsModal').modal('show');
+  getProfileByRole(role: any) {
+    this._datoService.getProfileByRole(role).subscribe({
+      next: (response) => {
+        // console.log('Profile response', response);
+        this.modulesPermissions = response.data;
+        this.modulesPermissions.forEach((el) => {
+          this.permissions.push(el.permissions);
+        });
+        // console.log('modulesPermissions', this.modulesPermissions);
+        // console.log('permissions', this.permissions);
+        setTimeout(() => {
+          $('.selectpicker').selectpicker('refresh');
+        }, 150);
+      },
+      error: (error: HttpErrorResponse) => {
+        console.log('Permissions error', error);
+      },
+    });
   }
 
-  savePermissions(permissionsForm: any) {
-    console.log('guardar!', permissionsForm);
-    
+  profileModal(role: Role) {
+    console.log('role', role.name);
+    this.dato = role;
+    this.permissions = [];
+    this.getProfileByRole(role._id);
+    this.saveAndExit = false;
+    $('#profileModal').modal('show');
+  }
+
+  saveProfile(permissionsForm: any) {
+    let dataRaw: any[] = [];
+    this.appModules.forEach((value, key) => {
+      dataRaw.push({
+        module: value._id,
+        permissions: this.permissions[key],
+        role: this.dato._id,
+      });
+    });
+
+    this._datoService.saveProfile({ profile: dataRaw }).subscribe({
+      next: (response) => {
+        console.log('Profile response', response);
+        $('#profileModal').modal('hide');
+        Swal.fire(this.page_title, response.msg ?? 'Todo bien!', 'success');
+      },
+      error: (error: HttpErrorResponse) => {
+        console.log('Profile error', error);
+        let mensaje = '';
+        if (error.error.errors && error.error.errors.length > 0) {
+          for (let i in error.error.errors) {
+            mensaje += error.error.errors[i].msg + '\n';
+          }
+        } else {
+          mensaje = error.error.msg;
+        }
+
+        if (error.status == 401) {
+          Swal.fire({
+            title: this.page_title,
+            text: mensaje ?? error.error.msg,
+            showDenyButton: true,
+            confirmButtonText: 'Continuar',
+            denyButtonText: 'Cerrar Sesión',
+          }).then((result) => {
+            if (result.isDenied) {
+              this._router.navigate(['/logout/1']);
+            }
+          });
+        } else {
+          Swal.fire(this.page_title, mensaje ?? 'Todo mal!', 'error');
+        }
+      },
+    });
   }
 }

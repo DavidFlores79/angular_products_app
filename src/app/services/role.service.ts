@@ -41,6 +41,29 @@ export class RoleService {
 
     }
 
+    getProfile( role_id :any, module_id :any ): Observable<any> {
+
+        let headers = new HttpHeaders().set('Content-Type', 'application/json');
+        return this._http.get(this.url+'/api/profiles/'+role_id+'/'+module_id, { headers: headers});
+
+    }
+
+    getProfileByRole( role_id :any ): Observable<any> {
+
+        let headers = new HttpHeaders().set('Content-Type', 'application/json');
+        return this._http.get(this.url+'/api/profiles/'+role_id, { headers: headers});
+
+    }
+
+    saveProfile( data: any ): Observable<any> {
+        console.log('save profile', data);
+        
+        let body = data;
+        let headers = new HttpHeaders().set('Content-Type', 'application/json');
+        return this._http.post(this.url+'/api/profiles', body,  { headers: headers});
+
+    }
+
     postDato( role: Role ): Observable<any> {
 
         let body = role;
