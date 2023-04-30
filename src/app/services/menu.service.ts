@@ -21,7 +21,6 @@ export class MenuService {
     
     // console.log('logueado', user);
     let headers = new HttpHeaders().set('Content-Type', 'application/json');
-    return this._http.get(this.url+'/api/roles/'+user.role._id, { headers: headers});
-
+    return this._http.get(this.url+'/api/profiles/'+user.role._id+'/menu', { headers: headers});
   }
 }

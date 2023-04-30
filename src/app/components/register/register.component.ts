@@ -36,7 +36,7 @@ export class RegisterComponent implements OnInit{
       next: (isLoggedIn) =>{
         // console.log('next', isLoggedIn);
         if(isLoggedIn) {
-          this._router.navigate(['inicio']);
+          this._router.navigate(['home']);
         } 
      },
      error: (error: HttpErrorResponse) => {       

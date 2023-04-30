@@ -84,6 +84,28 @@ export class RolesComponent {
       },
       error: (error: HttpErrorResponse) => {
         console.log('error', error);
+        let mensaje = '';
+        if (error.error.errors && error.error.errors.length > 0) {
+          for (let i in error.error.errors) {
+            mensaje += error.error.errors[i].msg + '\n';
+          }
+        } else {
+          mensaje = error.error.msg;
+        }
+
+        switch (error.status) {
+          case 401:
+            Swal.fire(this.page_title, mensaje ?? 'Todo mal!', 'error').then(
+              () => this._router.navigate(['home'])
+            );
+            break;
+          case 403:
+            this._router.navigate(['no-access']);
+            break;
+          default:
+            Swal.fire(this.page_title, mensaje ?? 'Todo mal!', 'error');
+            break;
+        }
       },
     });
   }
@@ -99,6 +121,28 @@ export class RolesComponent {
       },
       error: (error: HttpErrorResponse) => {
         console.log('error', error);
+        let mensaje = '';
+        if (error.error.errors && error.error.errors.length > 0) {
+          for (let i in error.error.errors) {
+            mensaje += error.error.errors[i].msg + '\n';
+          }
+        } else {
+          mensaje = error.error.msg;
+        }
+
+        switch (error.status) {
+          case 401:
+            Swal.fire(this.page_title, mensaje ?? 'Todo mal!', 'error').then(
+              () => this._router.navigate(['home'])
+            );
+            break;
+          case 403:
+            this._router.navigate(['no-access']);
+            break;
+          default:
+            Swal.fire(this.page_title, mensaje ?? 'Todo mal!', 'error');
+            break;
+        }
       },
     });
   }
@@ -111,6 +155,28 @@ export class RolesComponent {
       },
       error: (error: HttpErrorResponse) => {
         console.log('error', error);
+        let mensaje = '';
+        if (error.error.errors && error.error.errors.length > 0) {
+          for (let i in error.error.errors) {
+            mensaje += error.error.errors[i].msg + '\n';
+          }
+        } else {
+          mensaje = error.error.msg;
+        }
+
+        switch (error.status) {
+          case 401:
+            Swal.fire(this.page_title, mensaje ?? 'Todo mal!', 'error').then(
+              () => this._router.navigate(['home'])
+            );
+            break;
+          case 403:
+            this._router.navigate(['no-access']);
+            break;
+          default:
+            Swal.fire(this.page_title, mensaje ?? 'Todo mal!', 'error');
+            break;
+        }
       },
     });
   }
@@ -155,20 +221,15 @@ export class RolesComponent {
           mensaje = error.error.msg;
         }
 
-        if (error.status == 401) {
-          Swal.fire({
-            title: this.page_title,
-            text: mensaje ?? error.error.msg,
-            showDenyButton: true,
-            confirmButtonText: 'Continuar',
-            denyButtonText: 'Cerrar Sesión',
-          }).then((result) => {
-            if (result.isDenied) {
-              this._router.navigate(['/logout/1']);
-            }
-          });
-        } else {
-          Swal.fire(this.page_title, mensaje ?? 'Todo mal!', 'error');
+        switch (error.status) {
+          case 401:
+            Swal.fire(this.page_title, mensaje ?? 'Todo mal!', 'error').then(
+              () => this._router.navigate(['home'])
+            );
+            break;
+          default:
+            Swal.fire(this.page_title, mensaje ?? 'Todo mal!', 'error');
+            break;
         }
       },
     });
@@ -213,12 +274,16 @@ export class RolesComponent {
           mensaje = error.error.msg;
         }
 
-        Swal.fire({
-          title: this.page_title,
-          text: mensaje ?? 'Todo mal!',
-          icon: 'error',
-          confirmButtonText: 'OK',
-        });
+        switch (error.status) {
+          case 401:
+            Swal.fire(this.page_title, mensaje ?? 'Todo mal!', 'error').then(
+              () => this._router.navigate(['home'])
+            );
+            break;
+          default:
+            Swal.fire(this.page_title, mensaje ?? 'Todo mal!', 'error');
+            break;
+        }
       },
     });
   }
@@ -257,20 +322,15 @@ export class RolesComponent {
           mensaje = error.error.msg;
         }
 
-        if (error.status == 401) {
-          Swal.fire({
-            title: this.page_title,
-            text: mensaje,
-            showDenyButton: true,
-            confirmButtonText: 'Continuar',
-            denyButtonText: 'Cerrar Sesión',
-          }).then((result) => {
-            if (result.isDenied) {
-              this._router.navigate(['/logout/1']);
-            }
-          });
-        } else {
-          Swal.fire(this.page_title, mensaje ?? 'Todo mal!', 'error');
+        switch (error.status) {
+          case 401:
+            Swal.fire(this.page_title, mensaje ?? 'Todo mal!', 'error').then(
+              () => this._router.navigate(['home'])
+            );
+            break;
+          default:
+            Swal.fire(this.page_title, mensaje ?? 'Todo mal!', 'error');
+            break;
         }
       },
     });
@@ -292,6 +352,25 @@ export class RolesComponent {
       },
       error: (error: HttpErrorResponse) => {
         console.log('Permissions error', error);
+        let mensaje = '';
+        if (error.error.errors && error.error.errors.length > 0) {
+          for (let i in error.error.errors) {
+            mensaje += error.error.errors[i].msg + '\n';
+          }
+        } else {
+          mensaje = error.error.msg;
+        }
+
+        switch (error.status) {
+          case 401:
+            Swal.fire(this.page_title, mensaje ?? 'Todo mal!', 'error').then(
+              () => this._router.navigate(['home'])
+            );
+            break;
+          default:
+            Swal.fire(this.page_title, mensaje ?? 'Todo mal!', 'error');
+            break;
+        }
       },
     });
   }
@@ -332,20 +411,15 @@ export class RolesComponent {
           mensaje = error.error.msg;
         }
 
-        if (error.status == 401) {
-          Swal.fire({
-            title: this.page_title,
-            text: mensaje ?? error.error.msg,
-            showDenyButton: true,
-            confirmButtonText: 'Continuar',
-            denyButtonText: 'Cerrar Sesión',
-          }).then((result) => {
-            if (result.isDenied) {
-              this._router.navigate(['/logout/1']);
-            }
-          });
-        } else {
-          Swal.fire(this.page_title, mensaje ?? 'Todo mal!', 'error');
+        switch (error.status) {
+          case 401:
+            Swal.fire(this.page_title, mensaje ?? 'Todo mal!', 'error').then(
+              () => this._router.navigate(['home'])
+            );
+            break;
+          default:
+            Swal.fire(this.page_title, mensaje ?? 'Todo mal!', 'error');
+            break;
         }
       },
     });

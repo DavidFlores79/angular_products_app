@@ -19,7 +19,7 @@ export class ForbiddenComponent {
   }
 
   redirectHome() {
-    this._router.navigate(['inicio']);
+    this._router.navigate(['home']);
   }
 
 }

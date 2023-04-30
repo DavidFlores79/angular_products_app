@@ -41,7 +41,7 @@ export class LoginComponent implements OnInit{
     this._titleService.setTitle(`Angular App | ${this.page_title}`);
     this.logout();
 
-    if(this._authService.isLoggedIn$()) this._router.navigate(['inicio']);
+    if(this._authService.isLoggedIn$()) this._router.navigate(['home']);
   
   }
 
@@ -58,7 +58,7 @@ export class LoginComponent implements OnInit{
          localStorage.setItem('identity', JSON.stringify(this.identity));
 
          loginForm.reset();
-         this._router.navigate(['/inicio']);
+         this._router.navigate(['/home']);
       },
       error: (error: HttpErrorResponse) => {
         // console.log('Login error', error);

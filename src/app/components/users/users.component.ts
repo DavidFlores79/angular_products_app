@@ -27,7 +27,6 @@ export class UsersComponent {
   public page_title: string;
   public dato: User;
   public datos: User[];
-  // public role: Role;
   public roles: Role[];
   public errorMessages: any;
   public successMsg: string;
@@ -102,6 +101,7 @@ export class UsersComponent {
       },
       error: (error: HttpErrorResponse) => {
         console.log('error', error);
+        
       },
     });
   }
@@ -125,13 +125,11 @@ export class UsersComponent {
 
         switch (error.status) {
           case 401:
-            Swal.fire(this.page_title, mensaje ?? 'Todo mal!', 'error');
-            this._router.navigate(['inicio']);              
+            Swal.fire(this.page_title, mensaje ?? 'Todo mal!', 'error').then(() => this._router.navigate(['home']));
             break;
           case 403:
-            this._router.navigate(['sin-acceso']);
+            this._router.navigate(['no-access']);
             break;
-        
           default:
             Swal.fire(this.page_title, mensaje ?? 'Todo mal!', 'error');
             break;
@@ -181,8 +179,6 @@ export class UsersComponent {
       },
       error: (error: HttpErrorResponse) => {
         console.log('error', error);
-
-        // $('#createModal').modal('hide');
         let mensaje = '';
         if (error.error.errors && error.error.errors.length > 0) {
           for (let i in error.error.errors) {
@@ -192,20 +188,13 @@ export class UsersComponent {
           mensaje = error.error.msg;
         }
 
-        if (error.status == 401) {
-          Swal.fire({
-            title: this.page_title,
-            text: mensaje,
-            showDenyButton: true,
-            confirmButtonText: 'Continuar',
-            denyButtonText: 'Cerrar Sesión',
-          }).then((result) => {
-            if (result.isDenied) {
-              this._router.navigate(['/logout/1']);
-            }
-          });
-        } else {
-          Swal.fire(this.page_title, mensaje ?? 'Todo mal!', 'error');
+        switch (error.status) {
+          case 401:
+            Swal.fire(this.page_title, mensaje ?? 'Todo mal!', 'error').then(() => this._router.navigate(['home']));
+            break;        
+          default:
+            Swal.fire(this.page_title, mensaje ?? 'Todo mal!', 'error');
+            break;
         }
       },
     });
@@ -236,7 +225,6 @@ export class UsersComponent {
       },
       error: (error: HttpErrorResponse) => {
         console.log('error', error);
-
         $('#editModal').modal('hide');
         let mensaje = '';
         if (error.error.errors && error.error.errors.length > 0) {
@@ -247,12 +235,14 @@ export class UsersComponent {
           mensaje = error.error.msg;
         }
 
-        Swal.fire({
-          title: this.page_title,
-          text: mensaje ?? 'Todo mal!',
-          icon: 'error',
-          confirmButtonText: 'OK',
-        });
+        switch (error.status) {
+          case 401:
+            Swal.fire(this.page_title, mensaje ?? 'Todo mal!', 'error').then(() => this._router.navigate(['home']));
+            break;        
+          default:
+            Swal.fire(this.page_title, mensaje ?? 'Todo mal!', 'error');
+            break;
+        }
       },
     });
   }
@@ -295,20 +285,13 @@ export class UsersComponent {
           mensaje = error.error.msg;
         }
 
-        if (error.status == 401) {
-          Swal.fire({
-            title: this.page_title,
-            text: mensaje,
-            showDenyButton: true,
-            confirmButtonText: 'Continuar',
-            denyButtonText: 'Cerrar Sesión',
-          }).then((result) => {
-            if (result.isDenied) {
-              this._router.navigate(['/logout/1']);
-            }
-          });
-        } else {
-          Swal.fire(this.page_title, mensaje ?? 'Todo mal!', 'error');
+        switch (error.status) {
+          case 401:
+            Swal.fire(this.page_title, mensaje ?? 'Todo mal!', 'error').then(() => this._router.navigate(['home']));
+            break;        
+          default:
+            Swal.fire(this.page_title, mensaje ?? 'Todo mal!', 'error');
+            break;
         }
       },
     });

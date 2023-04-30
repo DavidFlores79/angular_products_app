@@ -21,18 +21,18 @@ import { RolesComponent } from "./components/roles/roles.component";
 //definir las rutas
 const appRoutes: Routes = [
     { path: '', component: LoginComponent, },
-    { path: 'inicio', component: HomeComponent, canActivate: [AuthGuard]},
+    { path: 'home', component: HomeComponent, canActivate: [AuthGuard]},
     { path: 'login', component: LoginComponent, },
     { path: 'logout/:sure', component: LoginComponent, },
-    { path: 'registro', component: RegisterComponent, },
-    { path: 'perfil', component: ProfileComponent, canActivate: [AuthGuard]},
-    { path: 'usuarios', component: UsersComponent, canActivate: [AuthGuard]},
-    { path: 'productos', component: ProductsComponent, canActivate: [AuthGuard, AdminGuard]},
-    { path: 'categorias', component: CategoriesComponent, canActivate: [AuthGuard]},
-    { path: 'modulos', component: ModulesComponent, canActivate: [AuthGuard]},
+    { path: 'register', component: RegisterComponent, },
+    { path: 'profile', component: ProfileComponent, canActivate: [AuthGuard]},
+    { path: 'users', component: UsersComponent, canActivate: [AuthGuard]},
+    { path: 'products', component: ProductsComponent, canActivate: [AuthGuard]},
+    { path: 'categories', component: CategoriesComponent, canActivate: [AuthGuard]},
+    { path: 'modules', component: ModulesComponent, canActivate: [AuthGuard]},
     { path: 'roles', component: RolesComponent, canActivate: [AuthGuard]},
     { path: 'chat', component: ChatComponent, canActivate: [AuthGuard]},
-    { path: 'sin-acceso', component: ForbiddenComponent},
+    { path: 'no-access', component: ForbiddenComponent},
     { path: '**', component: ErrorComponent, },
 ];
 

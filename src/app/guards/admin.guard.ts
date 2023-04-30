@@ -26,7 +26,7 @@ export class AdminGuard {
     return this._authService
       .isAdmin$()
       .pipe(
-        tap((isAdmin) => !isAdmin && this._router.navigate(['sin-acceso']))
+        tap((isAdmin) => !isAdmin && this._router.navigate(['no-access']))
       );
   }
 }

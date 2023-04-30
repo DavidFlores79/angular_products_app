@@ -3,7 +3,11 @@ import { Component } from '@angular/core';
 import { HttpErrorResponse } from '@angular/common/http';
 import Swal from 'sweetalert2';
 import { Router } from '@angular/router';
-import { faPencilAlt, faTrash, faPlusCircle } from '@fortawesome/free-solid-svg-icons';
+import {
+  faPencilAlt,
+  faTrash,
+  faPlusCircle,
+} from '@fortawesome/free-solid-svg-icons';
 //Del CRUD
 import { global } from 'src/app/services/global';
 import { ModuleService } from 'src/app/services/module.service';
@@ -82,15 +86,45 @@ export class ModulesComponent {
       },
       error: (error: HttpErrorResponse) => {
         console.log('error', error);
+        let mensaje = '';
+        if (error.error.errors && error.error.errors.length > 0) {
+          for (let i in error.error.errors) {
+            mensaje += error.error.errors[i].msg + '\n';
+          }
+        } else {
+          mensaje = error.error.msg;
+        }
+
+        switch (error.status) {
+          case 401:
+            Swal.fire(this.page_title, mensaje ?? 'Todo mal!', 'error').then(
+              () => this._router.navigate(['home'])
+            );
+            break;
+          case 403:
+            this._router.navigate(['no-access']);
+            break;
+
+          default:
+            Swal.fire(this.page_title, mensaje ?? 'Todo mal!', 'error');
+            break;
+        }
       },
-      
     });
   }
 
   createDato() {
-    this.dato = this.dato = new Module(0, '', '', '', true, undefined, undefined);
+    this.dato = this.dato = new Module(
+      0,
+      '',
+      '',
+      '',
+      true,
+      undefined,
+      undefined
+    );
     console.log('dato', this.dato);
-    
+
     $('#createModal').modal('show');
   }
 
@@ -117,8 +151,7 @@ export class ModulesComponent {
 
         $('#createModal').modal('hide');
         let mensaje = '';
-        if(error.error.errors &&  error.error.errors.length > 0) {
-          
+        if (error.error.errors && error.error.errors.length > 0) {
           for (let i in error.error.errors) {
             mensaje += error.error.errors[i].msg + '\n';
           }
@@ -126,24 +159,17 @@ export class ModulesComponent {
           mensaje = error.error.msg;
         }
 
-        if(error.status == 401) {
-          Swal.fire({
-            title: this.page_title,
-            text: mensaje ?? error.error.msg,
-            showDenyButton: true,
-            confirmButtonText: 'Continuar',
-            denyButtonText: 'Cerrar Sesión'
-          }).then((result) => {
-            if (result.isDenied) {
-              this._router.navigate(['/logout/1']);
-            } 
-          });            
-        } else {
-          Swal.fire(this.page_title, mensaje ?? 'Todo mal!', 'error');
+        switch (error.status) {
+          case 401:
+            Swal.fire(this.page_title, mensaje ?? 'Todo mal!', 'error').then(
+              () => this._router.navigate(['home'])
+            );
+            break;
+          default:
+            Swal.fire(this.page_title, mensaje ?? 'Todo mal!', 'error');
+            break;
         }
-        
       },
-      
     });
   }
 
@@ -158,7 +184,9 @@ export class ModulesComponent {
       next: (response) => {
         console.log(response);
         // this.dato = response.data;
-        this.datos = this.datos.map(dato => (dato._id == response.data._id) ? dato = response.data : dato);
+        this.datos = this.datos.map((dato) =>
+          dato._id == response.data._id ? (dato = response.data) : dato
+        );
         $('#editModal').modal('hide');
 
         Swal.fire({
@@ -173,8 +201,7 @@ export class ModulesComponent {
 
         $('#editModal').modal('hide');
         let mensaje = '';
-        if(error.error.errors &&  error.error.errors.length > 0) {
-          
+        if (error.error.errors && error.error.errors.length > 0) {
           for (let i in error.error.errors) {
             mensaje += error.error.errors[i].msg + '\n';
           }
@@ -182,14 +209,17 @@ export class ModulesComponent {
           mensaje = error.error.msg;
         }
 
-        Swal.fire({
-          title: this.page_title,
-          text: mensaje ?? 'Todo mal!',
-          icon: 'error',
-          confirmButtonText: 'OK',
-        });
+        switch (error.status) {
+          case 401:
+            Swal.fire(this.page_title, mensaje ?? 'Todo mal!', 'error').then(
+              () => this._router.navigate(['home'])
+            );
+            break;
+          default:
+            Swal.fire(this.page_title, mensaje ?? 'Todo mal!', 'error');
+            break;
+        }
       },
-      
     });
   }
 
@@ -205,7 +235,9 @@ export class ModulesComponent {
       next: (response) => {
         console.log(response);
         this.successMsg = response.msg;
-        this.datos = this.datos.filter(product => product._id != this.dato._id);
+        this.datos = this.datos.filter(
+          (product) => product._id != this.dato._id
+        );
         $('#deleteModal').modal('hide');
         Swal.fire({
           title: this.page_title,
@@ -219,8 +251,7 @@ export class ModulesComponent {
 
         $('#deleteModal').modal('hide');
         let mensaje = '';
-        if(error.error.errors && error.error.errors.length > 0) {
-          
+        if (error.error.errors && error.error.errors.length > 0) {
           for (let i in error.error.errors) {
             mensaje += error.error.errors[i].msg + '\n';
           }
@@ -228,24 +259,17 @@ export class ModulesComponent {
           mensaje = error.error.msg;
         }
 
-        if(error.status == 401) {
-          Swal.fire({
-            title: this.page_title,
-            text: mensaje,
-            showDenyButton: true,
-            confirmButtonText: 'Continuar',
-            denyButtonText: 'Cerrar Sesión'
-          }).then((result) => {
-            if (result.isDenied) {
-              this._router.navigate(['/logout/1']);
-            } 
-          });            
-        } else {
-          Swal.fire(this.page_title, mensaje ?? 'Todo mal!', 'error');
+        switch (error.status) {
+          case 401:
+            Swal.fire(this.page_title, mensaje ?? 'Todo mal!', 'error').then(
+              () => this._router.navigate(['home'])
+            );
+            break;
+          default:
+            Swal.fire(this.page_title, mensaje ?? 'Todo mal!', 'error');
+            break;
         }
-        
       },
-      
     });
   }
 

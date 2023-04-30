@@ -3,7 +3,11 @@ import { Component } from '@angular/core';
 import { HttpErrorResponse } from '@angular/common/http';
 import Swal from 'sweetalert2';
 import { Router } from '@angular/router';
-import { faPencilAlt, faTrash, faPlusCircle } from '@fortawesome/free-solid-svg-icons';
+import {
+  faPencilAlt,
+  faTrash,
+  faPlusCircle,
+} from '@fortawesome/free-solid-svg-icons';
 //Del CRUD
 import { ProductService } from 'src/app/services/product.service';
 import { Product } from '../../models/product.model';
@@ -64,7 +68,18 @@ export class ProductsComponent {
 
   constructor(public _datoService: ProductService, private _router: Router) {
     this.page_title = 'Productos';
-    this.dato = new Product(0, '', 0, true, true, 0, new Category(0, '', false, '', undefined, undefined), '', undefined, undefined);
+    this.dato = new Product(
+      0,
+      '',
+      0,
+      true,
+      true,
+      0,
+      new Category(0, '', false, '', undefined, undefined),
+      '',
+      undefined,
+      undefined
+    );
     this.errorMessages = [];
     this.successMsg = '';
     this.datos = [];
@@ -87,7 +102,6 @@ export class ProductsComponent {
       error: (error: HttpErrorResponse) => {
         console.log('error', error);
       },
-      
     });
   }
 
@@ -99,15 +113,48 @@ export class ProductsComponent {
       },
       error: (error: HttpErrorResponse) => {
         console.log('error', error);
+        let mensaje = '';
+        if (error.error.errors && error.error.errors.length > 0) {
+          for (let i in error.error.errors) {
+            mensaje += error.error.errors[i].msg + '\n';
+          }
+        } else {
+          mensaje = error.error.msg;
+        }
+
+        switch (error.status) {
+          case 401:
+            Swal.fire(this.page_title, mensaje ?? 'Todo mal!', 'error').then(
+              () => this._router.navigate(['home'])
+            );
+            break;
+          case 403:
+            this._router.navigate(['no-access']);
+            break;
+
+          default:
+            Swal.fire(this.page_title, mensaje ?? 'Todo mal!', 'error');
+            break;
+        }
       },
-      
     });
   }
 
   createDato() {
-    this.dato = new Product(0, '', 0, true, true, 0, this.categories[0], '', undefined, undefined);
+    this.dato = new Product(
+      0,
+      '',
+      0,
+      true,
+      true,
+      0,
+      this.categories[0],
+      '',
+      undefined,
+      undefined
+    );
     console.log('dato', this.dato);
-    
+
     $('#createModal').modal('show');
   }
 
@@ -134,8 +181,7 @@ export class ProductsComponent {
 
         $('#createModal').modal('hide');
         let mensaje = '';
-        if(error.error.errors &&  error.error.errors.length > 0) {
-          
+        if (error.error.errors && error.error.errors.length > 0) {
           for (let i in error.error.errors) {
             mensaje += error.error.errors[i].msg + '\n';
           }
@@ -143,24 +189,17 @@ export class ProductsComponent {
           mensaje = error.error.msg;
         }
 
-        if(error.status == 401) {
-          Swal.fire({
-            title: this.page_title,
-            text: mensaje ?? error.error.msg,
-            showDenyButton: true,
-            confirmButtonText: 'Continuar',
-            denyButtonText: 'Cerrar Sesión'
-          }).then((result) => {
-            if (result.isDenied) {
-              this._router.navigate(['/logout/1']);
-            } 
-          });            
-        } else {
-          Swal.fire(this.page_title, mensaje ?? 'Todo mal!', 'error');
+        switch (error.status) {
+          case 401:
+            Swal.fire(this.page_title, mensaje ?? 'Todo mal!', 'error').then(
+              () => this._router.navigate(['home'])
+            );
+            break;
+          default:
+            Swal.fire(this.page_title, mensaje ?? 'Todo mal!', 'error');
+            break;
         }
-        
       },
-      
     });
   }
 
@@ -175,7 +214,9 @@ export class ProductsComponent {
       next: (response) => {
         console.log(response);
         // this.dato = response.data;
-        this.datos = this.datos.map(dato => (dato._id == response.data._id) ? dato = response.data : dato);
+        this.datos = this.datos.map((dato) =>
+          dato._id == response.data._id ? (dato = response.data) : dato
+        );
         $('#editModal').modal('hide');
 
         Swal.fire({
@@ -190,8 +231,7 @@ export class ProductsComponent {
 
         $('#editModal').modal('hide');
         let mensaje = '';
-        if(error.error.errors &&  error.error.errors.length > 0) {
-          
+        if (error.error.errors && error.error.errors.length > 0) {
           for (let i in error.error.errors) {
             mensaje += error.error.errors[i].msg + '\n';
           }
@@ -199,14 +239,17 @@ export class ProductsComponent {
           mensaje = error.error.msg;
         }
 
-        Swal.fire({
-          title: this.page_title,
-          text: mensaje ?? 'Todo mal!',
-          icon: 'error',
-          confirmButtonText: 'OK',
-        });
+        switch (error.status) {
+          case 401:
+            Swal.fire(this.page_title, mensaje ?? 'Todo mal!', 'error').then(
+              () => this._router.navigate(['home'])
+            );
+            break;
+          default:
+            Swal.fire(this.page_title, mensaje ?? 'Todo mal!', 'error');
+            break;
+        }
       },
-      
     });
   }
 
@@ -222,7 +265,9 @@ export class ProductsComponent {
       next: (response) => {
         console.log(response);
         this.successMsg = response.msg;
-        this.datos = this.datos.filter(product => product._id != this.dato._id);
+        this.datos = this.datos.filter(
+          (product) => product._id != this.dato._id
+        );
         $('#deleteModal').modal('hide');
         Swal.fire({
           title: this.page_title,
@@ -236,8 +281,7 @@ export class ProductsComponent {
 
         $('#deleteModal').modal('hide');
         let mensaje = '';
-        if(error.error.errors && error.error.errors.length > 0) {
-          
+        if (error.error.errors && error.error.errors.length > 0) {
           for (let i in error.error.errors) {
             mensaje += error.error.errors[i].msg + '\n';
           }
@@ -245,24 +289,17 @@ export class ProductsComponent {
           mensaje = error.error.msg;
         }
 
-        if(error.status == 401) {
-          Swal.fire({
-            title: this.page_title,
-            text: mensaje,
-            showDenyButton: true,
-            confirmButtonText: 'Continuar',
-            denyButtonText: 'Cerrar Sesión'
-          }).then((result) => {
-            if (result.isDenied) {
-              this._router.navigate(['/logout/1']);
-            } 
-          });            
-        } else {
-          Swal.fire(this.page_title, mensaje ?? 'Todo mal!', 'error');
+        switch (error.status) {
+          case 401:
+            Swal.fire(this.page_title, mensaje ?? 'Todo mal!', 'error').then(
+              () => this._router.navigate(['home'])
+            );
+            break;
+          default:
+            Swal.fire(this.page_title, mensaje ?? 'Todo mal!', 'error');
+            break;
         }
-        
       },
-      
     });
   }
 
@@ -271,5 +308,4 @@ export class ProductsComponent {
     let myImage = evt.body.data;
     this.dato.image = myImage;
   }
-
 }

@@ -37,7 +37,7 @@ export class UserService {
     postUser( user: User ): Observable<any> {
 
         let body = user;
-        let headers = new HttpHeaders().set('Content-Type', 'application/json');
+        let headers = new HttpHeaders().set('Content-Type', 'application/json').set('Authorization', `Bearer ${localStorage.getItem('token')}`);
 
         return this._http.post(this.url+'/api/users', body, { headers: headers});
         
@@ -46,7 +46,7 @@ export class UserService {
     update( user: User ): Observable<any> {
 
         let body = user;
-        let headers = new HttpHeaders().set('Content-Type', 'application/json');
+        let headers = new HttpHeaders().set('Content-Type', 'application/json').set('Authorization', `Bearer ${localStorage.getItem('token')}`);
 
         return this._http.put(`${this.url}/api/users/${user._id}`, body, { headers: headers});
         
