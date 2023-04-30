@@ -29,7 +29,7 @@ export class AuthService {
     let body = user;
     let headers = new HttpHeaders().set('Content-Type', 'application/json');
 
-    return this._http.post(this.url + '/api/users', body, { headers: headers });
+    return this._http.post(this.url + '/auth/register', body, { headers: headers });
   }
 
   isLoggedIn$(): Observable<boolean> {

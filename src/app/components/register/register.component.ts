@@ -26,7 +26,7 @@ export class RegisterComponent implements OnInit{
 
   constructor( private _authService: AuthService, private _router: Router ) {
     this.page_title = 'Identifícate';
-    this.user = new User(1, '', '', '','','','USER_ROLE', true, true, '', '');
+    this.user = new User(0, '', '', '','','',undefined, true, true, '', '');
     this.errorMessages = [];
     this.successMsg = '';
   }
